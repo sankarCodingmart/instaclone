@@ -3,10 +3,12 @@ export default (sequelize, Sequelize) => {
     user_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
+      allowNull: false,
     },
     target_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
+      allowNull: false,
     },
   });
 };

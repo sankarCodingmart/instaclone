@@ -1,27 +1,27 @@
 export default (sequelize, Sequelize) => {
   return sequelize.define(
-    "Account",
+    "User",
     {
-      id: {
+      user_id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
       },
-      email: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      password: {
+      profile_pic_url: {
         type: Sequelize.STRING,
+      },
+      private_account: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      phone_number: {
-        type: Sequelize.BIGINT,
-      },
-      user_name: {
+      bio: {
         type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
+      },
+      website_url: {
+        type: Sequelize.STRING,
       },
     },
     { timestamps: true }

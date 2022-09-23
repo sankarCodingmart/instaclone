@@ -1,6 +1,7 @@
 import dbconfig from "../config/dbconnect.config";
 import { Sequelize } from "sequelize";
 import Account from "../models/account/account";
+import User from "../models/account/user";
 import Follow from "../models/account/follow";
 import CloseFriends from "./account/closeFriends";
 import Posts from "./posts/post";
@@ -20,6 +21,7 @@ import TwoFactorAuth from "./settings/twoFactorAuth";
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
   host: dbconfig.HOST,
   dialect: dbconfig.dialect,
+  logging: false,
 });
 
 sequelize
@@ -33,6 +35,7 @@ sequelize
 
 (async () => {
   await sequelize.sync({ force: true });
+  console.log("Drop and Resync DB");
 })();
 
 const db = {};
@@ -40,6 +43,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.account = Account(sequelize, Sequelize);
+db.user = User(sequelize, Sequelize);
 db.follow = Follow(sequelize, Sequelize);
 db.closeFriends = CloseFriends(sequelize, Sequelize);
 db.posts = Posts(sequelize, Sequelize);
@@ -57,6 +61,9 @@ db.limitActivity = LimitActivity(sequelize, Sequelize);
 db.twoFactorAuth = TwoFactorAuth(sequelize, Sequelize);
 
 //Relations
+db.account.hasOne(db.user, {
+  foreignKey: "user_id",
+});
 db.account.hasMany(db.follow, {
   foreignKey: "follower_id",
 });
@@ -100,7 +107,7 @@ db.posts.hasMany(db.comments, {
   foreignKey: "post_id",
 });
 db.comments.belongsToMany(db.postTag, { through: "CommentTags" });
-db.postTag.belongsToMany(db.comments, { through: "CommnetTags" });
+db.postTag.belongsToMany(db.comments, { through: "CommentTags" });
 db.account.hasMany(db.mention, {
   foreignKey: "user_id",
 });

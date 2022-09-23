@@ -7,6 +7,7 @@ export default (sequelize, Sequelize) => {
     user_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      unique: true,
     },
     user_name: {
       type: Sequelize.STRING,
