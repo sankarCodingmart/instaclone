@@ -1,15 +1,11 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("PostTag", {
-    post_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tag_id: {
+  return sequelize.define("Location", {
+    location_id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    tag_name: {
+    location_name: {
       type: Sequelize.STRING,
       allowNull: false,
     },

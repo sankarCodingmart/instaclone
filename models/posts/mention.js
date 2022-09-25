@@ -6,12 +6,15 @@ export default (sequelize, Sequelize) => {
     },
     user_id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
-      unique: true,
+      primaryKey: true,
     },
     user_name: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    post_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
     },
   });
 };

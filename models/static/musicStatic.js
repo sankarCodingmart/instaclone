@@ -1,17 +1,17 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("PostTag", {
-    post_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tag_id: {
+  return sequelize.define("MusicStatic", {
+    music_id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    tag_name: {
+    music_name: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    music_thumbnail_url: { type: Sequelize.STRING },
+    genre: {
+      type: Sequelize.STRING,
     },
   });
 };

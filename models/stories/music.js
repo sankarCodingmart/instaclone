@@ -2,16 +2,13 @@ export default (sequelize, Sequelize) => {
   return sequelize.define("Music", {
     music_id: {
       type: Sequelize.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
     },
-    music_name: {
-      type: Sequelize.STRING,
-      allowNull: false,
+    story_id: {
+      type: Sequelize.INTEGER,
     },
-    music_thumbnail_url: { type: Sequelize.STRING },
-    genre: {
-      type: Sequelize.STRING,
+    post_id: {
+      type: Sequelize.INTEGER,
     },
   });
 };

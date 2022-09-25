@@ -6,10 +6,6 @@ export default (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         primaryKey: true,
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       profile_pic_url: {
         type: Sequelize.STRING,
       },
@@ -22,6 +18,9 @@ export default (sequelize, Sequelize) => {
       },
       website_url: {
         type: Sequelize.STRING,
+      },
+      profile_story: {
+        type: Sequelize.BOOLEAN,
       },
     },
     { timestamps: true }

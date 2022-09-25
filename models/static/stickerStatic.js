@@ -1,15 +1,15 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("PostTag", {
-    post_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    tag_id: {
+  return sequelize.define("StickerStatic", {
+    sticker_id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    tag_name: {
+    sticker_name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    sticker_url: {
       type: Sequelize.STRING,
       allowNull: false,
     },

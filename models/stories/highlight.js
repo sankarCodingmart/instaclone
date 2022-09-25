@@ -1,26 +1,19 @@
 export default (sequelize, Sequelize) => {
   return sequelize.define(
-    "Stories",
+    "Highlight",
     {
       story_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
       },
       user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        primary_key: true,
       },
-      likes: {
-        type: Sequelize.BIGINT,
-        allowNull: false,
-        default: 0,
-      },
-      location: {
+      highlight_name: {
         type: Sequelize.INTEGER,
-      },
-      music_id: {
-        type: Sequelize.INTEGER,
+        allowNull: false,
+        default: "Highlights",
       },
     },
     { timestamps: true }

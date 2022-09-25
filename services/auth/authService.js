@@ -12,8 +12,12 @@ const signUp = async (req, res) => {
       password: bcrypt.hashSync(req.body.password, 8),
       email: req.body.email,
       phone_number: req.body.phone_number,
+      name: req.body.name,
     });
-    if (account) res.send({ message: "User was registered successfully!" });
+    if (account) {
+      signIn(req, res);
+      // res.send({ message: "User was registered successfully!" });
+    }
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -52,10 +56,12 @@ const signIn = async (req, res) => {
     var token = jwt.sign({ id: account.id }, config.secret, {
       expiresIn: 86400,
     });
+    res.setHeader("Set-Cookie", `jwt=${token};Path=/;HttpOnly`);
     return res.status(200).send({
       id: account.id,
       username: account.username,
       email: account.email,
+      name: account.name,
       phone_number: account.phone_number,
       accessToken: token,
     });
@@ -63,4 +69,4 @@ const signIn = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
-export { signUp, signIn };
+export { signIn, signUp };

@@ -1,6 +1,6 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("Media", {
-    post_id: {
+  return sequelize.define("StoryMedia", {
+    story_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
@@ -13,7 +13,7 @@ export default (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    post_type: {
+    story_type: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },

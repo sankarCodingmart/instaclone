@@ -27,6 +27,9 @@ export default (sequelize, Sequelize) => {
         allowNull: false,
         default: false,
       },
+      music_id: {
+        type: Sequelize.INTEGER,
+      },
     },
     { timestamps: true }
   );

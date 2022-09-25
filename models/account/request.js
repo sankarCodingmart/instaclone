@@ -1,10 +1,10 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("Stickers", {
-    sticker_id: {
+  return sequelize.define("Request", {
+    request_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
     },
-    story_id: {
+    requested_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
     },

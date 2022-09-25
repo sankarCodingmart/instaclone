@@ -1,21 +1,20 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("Media", {
-    post_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    media_id: {
+  return sequelize.define("StoryMention", {
+    mention_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
-      autoIncrement: true,
     },
-    media_url: {
+    user_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+    },
+    user_name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    post_type: {
+    story_id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      primaryKey: true,
     },
   });
 };

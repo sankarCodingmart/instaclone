@@ -9,18 +9,21 @@ export default (sequelize, Sequelize) => {
       },
       email: {
         type: Sequelize.STRING,
+      },
+      name: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        // allowNull: false,
       },
       phone_number: {
         type: Sequelize.BIGINT,
       },
       user_name: {
         type: Sequelize.STRING,
-        allowNull: false,
+        // allowNull: false,
         unique: true,
       },
     },
