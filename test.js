@@ -1,10 +1,40 @@
 import { HasMany, Op, QueryTypes, Sequelize } from "sequelize";
-const data = [
-  { name: "sankara" },
-  { name: "somu" },
-  { name: "akash" },
-  { name: "sriram" },
-  { name: "richard" },
+const Userdata = [
+  {
+    userName: "sankar1",
+    name: "sankara",
+    email: "sankarannamalai01@gmail.com",
+    password: "sk123",
+    phoneNumber: 9784561230,
+  },
+  {
+    name: "somu",
+    userName: "somu123",
+    email: "somu@gmail.com",
+    password: "somu123",
+    phoneNumber: 2365478910,
+  },
+  {
+    name: "Jil",
+    userName: "jil_mass",
+    email: "jil@gmail.com",
+    password: "jil321",
+    phoneNumber: 4567891230,
+  },
+  {
+    name: "Karna",
+    userName: "KaasiMedu_karna",
+    email: "karna@gmail.com",
+    password: "karna123",
+    phoneNumber: 1234567980,
+  },
+  {
+    name: "john",
+    userName: "John_Abraham",
+    email: "john@gmail.com",
+    password: "john123",
+    phoneNumber: 7895461230,
+  },
 ];
 
 let followdata = [];
@@ -108,14 +138,14 @@ export default async function createRecords(db) {
   //   });
   //   console.log(JSON.stringify(result));
   //   console.log(JSON.stringify(result2));
-  //   musicData.forEach(async (m) => {
-  //     const d = await musicStatic.create(m);
-  //     const artistData = {};
-  //     artistData.music_id = d.dataValues.music_id;
-  //     artistData.artist_name = m.artist_name;
-  //     await artist.create(artistData);
-  //   });
-  // data.forEach(async (d) => {
+  // musicData.forEach(async (m) => {
+  //   const d = await musicStatic.create(m);
+  //   const artistData = {};
+  //   artistData.music_id = d.dataValues.music_id;
+  //   artistData.artist_name = m.artist_name;
+  //   await artist.create(artistData);
+  // });
+  // Userdata.forEach(async (d) => {
   //   await account.create(d);
   // });
   // storydata.forEach(async (d) => {

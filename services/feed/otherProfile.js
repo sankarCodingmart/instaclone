@@ -3,16 +3,13 @@ import { db } from "../../models";
 
 const Account = db.account;
 const Post = db.posts;
-const Stories = db.stories;
-const Comments = db.comments;
 const User = db.user;
 const Follow = db.follow;
 const Mention = db.mention;
-const PostTag = db.postTag;
 const Media = db.media;
 const Highlight = db.highlight;
 
-const getProfilePage = async (req, res) => {
+const getOtherProfile = async (req, res) => {
   let user_id = req.params.userId;
   let account = await Account.findByPk(user_id, {
     include: {
@@ -29,6 +26,21 @@ const getProfilePage = async (req, res) => {
       follower_id: user_id,
     },
   });
+  account = JSON.parse(JSON.stringify(account));
+  follower = JSON.parse(JSON.stringify(follower));
+  following = JSON.parse(JSON.stringify(following));
+  let profilePageContent = {};
+  if (account.User.private_account === true) {
+    profilePageContent = {
+      followerCount: follower.length,
+      followingCount: following.length,
+      userName: account.user_name,
+      name: account.name,
+      bio: account.User?.bio,
+      accountType: "private",
+    };
+    return res.status(200).send(profilePageContent);
+  }
   let hightlights = await Highlight.findAll({
     attributes: { exclude: ["user_id", "story_id"] },
     where: {
@@ -37,12 +49,12 @@ const getProfilePage = async (req, res) => {
   });
   let posts = await Post.findAll({
     attributes: ["post_id"],
-    where: {
-      is_archived: false,
-    },
     include: [
       {
         model: Account,
+        where: {
+          is_archived: false,
+        },
         attributes: ["user_name"],
         where: {
           id: user_id,
@@ -59,9 +71,6 @@ const getProfilePage = async (req, res) => {
     },
     include: {
       model: Post,
-      where: {
-        is_archived: false,
-      },
       exclude: ["updatedAt", "user_id"],
       include: {
         model: Media,
@@ -70,14 +79,10 @@ const getProfilePage = async (req, res) => {
     },
   });
 
-  account = JSON.parse(JSON.stringify(account));
-  follower = JSON.parse(JSON.stringify(follower));
-  following = JSON.parse(JSON.stringify(following));
   hightlights = JSON.parse(JSON.stringify(hightlights));
   posts = JSON.parse(JSON.stringify(posts));
   taggedPosts = JSON.parse(JSON.stringify(taggedPosts));
   console.log(taggedPosts);
-  let profilePageContent = {};
   profilePageContent = {
     followerCount: follower.length,
     followingCount: following.length,
@@ -87,8 +92,9 @@ const getProfilePage = async (req, res) => {
     hightlights: hightlights,
     posts: posts,
     taggedPosts: taggedPosts,
+    accountType: "public",
   };
 
   await res.status(200).send(profilePageContent);
 };
-export default getProfilePage;
+export default getOtherProfile;

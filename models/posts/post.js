@@ -30,6 +30,10 @@ export default (sequelize, Sequelize) => {
       music_id: {
         type: Sequelize.INTEGER,
       },
+      is_archived: {
+        type: Sequelize.BOOLEAN,
+        default: false,
+      },
     },
     { timestamps: true }
   );

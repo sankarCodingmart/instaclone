@@ -28,6 +28,7 @@ import deleteMessage from "./Message/deleteMessage";
 import changeAccountType from "./settings/changePrivate";
 import getActivities from "./feed/getActivity";
 import changeAccountPrivacy from "./settings/changeAccountPrivacy";
+import archivePost from "./posts/archivePost";
 
 const service = {};
 
@@ -62,5 +63,6 @@ service.deleteMessage = deleteMessage;
 service.changeAccountType = changeAccountType;
 service.getActivities = getActivities;
 service.changeAccountPrivacy = changeAccountPrivacy;
+service.archivePost = archivePost;
 
 export { service };

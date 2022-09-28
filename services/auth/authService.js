@@ -10,19 +10,19 @@ const signUp = async (req, res) => {
     const otp = req.body.otp;
     const dbOtp = await Otp.findOne({
       where: {
-        mail_id: req.body.mailId,
+        mail_id: req.body.email,
         otp_code: otp,
       },
     });
     console.log(dbOtp);
-    if (Object.keys(JSON.parse(dbOtp)).length === 0) {
+    if (dbOtp && Object.keys(JSON.parse(JSON.stringify(dbOtp))).length === 0) {
       return res.status(200).send("Invalid OTP");
     }
     const account = await Account.create({
-      user_name: req.body.user_name,
+      user_name: req.body.userName,
       password: bcrypt.hashSync(req.body.password, 8),
       email: req.body.email,
-      phone_number: req.body.phone_number,
+      phone_number: req.body.phoneNumber,
       name: req.body.name,
     });
     if (account) {
@@ -37,7 +37,7 @@ const signIn = async (req, res) => {
   try {
     let account = await Account.findOne({
       where: {
-        user_name: req.body.user_name,
+        user_name: req.body.userName,
       },
     });
     account =
@@ -51,7 +51,7 @@ const signIn = async (req, res) => {
       account ??
       (await Account.findOne({
         where: {
-          phone_number: req.body.phone_number,
+          phone_number: req.body.phoneNumber,
         },
       }));
     const passwordValid = bcrypt.compareSync(
@@ -64,7 +64,7 @@ const signIn = async (req, res) => {
         message: "Invalid Password",
       });
     }
-    console.log(account);
+    // console.log(account);
     let token = jwt.sign({ id: account.id }, config.secret, {
       expiresIn: 86400,
     });
@@ -77,10 +77,10 @@ const signIn = async (req, res) => {
     });
     return res.status(200).send({
       id: account.id,
-      username: account.username,
+      userName: account.user_name,
       email: account.email,
       name: account.name,
-      phone_number: account.phone_number,
+      phoneNumber: account.phone_number,
       accessToken: token,
     });
   } catch (err) {

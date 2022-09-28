@@ -6,7 +6,7 @@ const verifySignUp = async (req, res, next) => {
   try {
     let user = await Account.findOne({
       where: {
-        user_name: req.body.user_name,
+        user_name: req.body.userName,
       },
     });
     if (user) {
@@ -29,7 +29,7 @@ const verifySignUp = async (req, res, next) => {
 
     user = await Account.findOne({
       where: {
-        phone_number: req.body.phone_number,
+        phone_number: req.body.phoneNumber,
       },
     });
     if (user) {

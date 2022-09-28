@@ -343,7 +343,7 @@ db.location.hasMany(db.posts, {
   onUpdate: "CASCADE",
 });
 db.mention.belongsTo(db.posts, {
-  foreignKey: "user_id",
+  foreignKey: "post_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
@@ -353,7 +353,7 @@ db.posts.belongsTo(db.location, {
   onUpdate: "CASCADE",
 });
 db.mention.belongsTo(db.account, {
-  foreignKey: "post_id",
+  foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
