@@ -48,6 +48,7 @@ const getFeedContent = async (req, res) => {
         profilePicUrl: acc?.User.profile_pic_url,
       });
     });
+    let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
     let followerStories = await Follow.findAll({
       where: {
         follower_id: account.id,
@@ -64,6 +65,9 @@ const getFeedContent = async (req, res) => {
               where: {
                 user_id: {
                   [Op.ne]: account.id,
+                },
+                createdAt: {
+                  [Op.gte]: yesterday,
                 },
               },
               required: true,

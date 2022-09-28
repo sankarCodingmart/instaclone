@@ -115,15 +115,15 @@ export default async function createRecords(db) {
   //     artistData.artist_name = m.artist_name;
   //     await artist.create(artistData);
   //   });
-  //   data.forEach(async (d) => {
-  //     await account.create(d);
-  //   });
-  //   storydata.forEach(async (d) => {
-  //     await stories.create(d);
-  //   });
-  //   followdata.forEach(async (d) => {
-  //     await follow.create(d);
-  //   });
+  // data.forEach(async (d) => {
+  //   await account.create(d);
+  // });
+  // storydata.forEach(async (d) => {
+  //   await stories.create(d);
+  // });
+  // followdata.forEach(async (d) => {
+  //   await follow.create(d);
+  // });
   //   const res = await stories.findAll();
   //   res.forEach((res) => {
   //     console.log("user_id: " + res.user_id + ", story_url: " + res.story_url);

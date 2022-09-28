@@ -1,21 +1,23 @@
 import nodemailer from "nodemailer";
 import { db } from "../../models";
-import credentialConfig from "../../config/credential.config";
+import dotenv from "dotenv";
 const Otp = db.otp;
 
 const generateOtp = (req, res) => {
+  dotenv.config();
+  console.log(process.env);
   const mail_id = req.body.mailId;
   const otp = Math.floor(100000 + Math.random() * 900000);
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: credentialConfig.email,
-      pass: credentialConfig.password,
+      user: process.env.EMAIL,
+      pass: process.env.PWD,
     },
   });
 
   let mailOptions = {
-    from: credentialConfig.email,
+    from: process.env.EMAIL,
     to: mail_id,
     subject: "OTP verification",
     text: `Your One Time Password for Signup for instaclone is ${otp}`,

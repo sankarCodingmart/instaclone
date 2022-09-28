@@ -7,7 +7,7 @@ const router = express.Router();
 //   res.send("hello");
 // });
 router.post("/generateOtp", generateOtp);
-router.post("/signup", signUp);
+router.post("/signup", verifySignUp, signUp);
 router.post("/login", signIn);
 
 export default router;
