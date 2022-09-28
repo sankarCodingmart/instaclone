@@ -10,14 +10,15 @@ export default (sequelize, Sequelize) => {
       primaryKey: true,
       allowNull: false,
     },
+    //Privacy-Type --> Block/Restrict/Muted
     privacy_type: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    save_login_info: {
+    //Privacy-Value --> True/False
+    privacy_value: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      default: true,
     },
   });
 };

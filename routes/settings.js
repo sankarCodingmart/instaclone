@@ -1,8 +1,13 @@
 import express from "express";
-import editProfile from "../services/settings/editProfile";
+import { service } from "../services";
 import { verifyToken } from "../middleware";
 const router = express.Router();
 
-router.post("/editProfile", verifyToken, editProfile);
-
+router.patch("/editProfile", verifyToken, service.editProfile);
+router.patch("/changeAccountType", verifyToken, service.changeAccountType);
+router.patch(
+  "/changeAccountPrivacy",
+  verifyToken,
+  service.changeAccountPrivacy
+);
 export default router;

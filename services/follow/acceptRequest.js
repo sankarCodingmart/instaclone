@@ -1,10 +1,9 @@
 import { db } from "../../models";
 
-const Account = db.account;
 const Follow = db.follow;
 const Request = db.request;
 const acceptRequest = async (req, res) => {
-  const { followerId, followeeId, type } = req.body;
+  const { followerId, followeeId } = req.body;
   await Request.destroy({
     requested_id: followerId,
     request_id: followeeId,
@@ -13,5 +12,6 @@ const acceptRequest = async (req, res) => {
     followee_id: followeeId,
     follower_id: followerId,
   });
+  await res.status(200).send("Request accepted added");
 };
 export default acceptRequest;

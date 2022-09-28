@@ -14,7 +14,7 @@ import Artist from "./stories/artist";
 import Comments from "./comments/comments";
 import Mention from "./posts/mention";
 import AccountPrivacy from "./settings/accountPrivacy";
-import LoginActivity from "./settings/loginActivity";
+import LoginActivity from "./activity/loginActivity";
 import LimitActivity from "./settings/limitActivity";
 import TwoFactorAuth from "./settings/twoFactorAuth";
 import Request from "./account/request";
@@ -26,6 +26,15 @@ import Stickers from "./stories/stickers";
 import StoryMedia from "./stories/storyMedia";
 import Location from "./static/location";
 import Highlight from "./stories/highlight";
+import CommentMention from "./comments/commentMention";
+import CommentTags from "./comments/commentTags";
+import Message from "./message/message";
+import Likes from "./account/likes";
+import UserSettings from "./settings/userSettings";
+import CommentActivity from "./activity/commentActivity";
+import PostActivity from "./activity/postActivity";
+import StoryActivity from "./activity/storyActivity";
+import Otp from "./account/otp";
 
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
   host: dbconfig.HOST,
@@ -45,6 +54,11 @@ sequelize
 // (async () => {
 //   await sequelize.sync({ force: true });
 //   console.log("Drop and Resync DB");
+// })();
+
+// (async () => {
+//   await sequelize.sync({ alter: true });
+//   console.log("Alter and Resync DB");
 // })();
 
 const db = {};
@@ -75,7 +89,16 @@ db.stickerStatic = StickerStatic(sequelize, Sequelize);
 db.music = Music(sequelize, Sequelize);
 db.storyMedia = StoryMedia(sequelize, Sequelize);
 db.location = Location(sequelize, Sequelize);
-db.highilght = Highlight(sequelize, Sequelize);
+db.highlight = Highlight(sequelize, Sequelize);
+db.commentMention = CommentMention(sequelize, Sequelize);
+db.commentTags = CommentTags(sequelize, Sequelize);
+db.message = Message(sequelize, Sequelize);
+db.likes = Likes(sequelize, Sequelize);
+db.userSettings = UserSettings(sequelize, Sequelize);
+db.commentActivity = CommentActivity(sequelize, Sequelize);
+db.postActivity = PostActivity(sequelize, Sequelize);
+db.storyActivity = StoryActivity(sequelize, Sequelize);
+db.otp = Otp(sequelize, Sequelize);
 //Relations
 //User
 db.account.hasOne(db.user, {
@@ -92,21 +115,25 @@ db.user.belongsTo(db.account, {
 //follow
 db.account.hasOne(db.follow, {
   foreignKey: "follower_id",
+  as: "follower",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.follow.belongsTo(db.account, {
   foreignKey: "follower_id",
+  as: "follower",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.account.hasMany(db.follow, {
   foreignKey: "followee_id",
+  as: "following",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.follow.belongsTo(db.account, {
   foreignKey: "followee_id",
+  as: "following",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
@@ -227,8 +254,16 @@ db.stories.belongsTo(db.account, {
 });
 
 //Music & Artist
-db.musicStatic.belongsToMany(db.artist, { through: "MusicArtist" });
-db.artist.belongsToMany(db.musicStatic, { through: "MusicArtist" });
+db.musicStatic.hasMany(db.artist, {
+  foreignKey: "music_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.artist.belongsTo(db.musicStatic, {
+  foreignKey: "music_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 db.musicStatic.hasMany(db.music, {
   foreignKey: "music_id",
   onDelete: "CASCADE",
@@ -253,11 +288,13 @@ db.comments.belongsTo(db.account, {
 });
 db.comments.hasMany(db.comments, {
   foreignKey: "reply_id",
+  as: "Comment",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.comments.belongsTo(db.comments, {
   foreignKey: "reply_id",
+  as: "Reply",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
@@ -273,8 +310,16 @@ db.comments.belongsTo(db.posts, {
 });
 
 //Comment Tags
-db.comments.belongsToMany(db.postTag, { through: "CommentTags" });
-db.postTag.belongsToMany(db.comments, { through: "CommentTags" });
+db.posts.hasMany(db.commentTags, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.commentTags.belongsTo(db.posts, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
 
 //Mentions
 db.account.hasOne(db.mention, {
@@ -472,15 +517,238 @@ db.stories.belongsTo(db.music, {
   onUpdate: "CASCADE",
 });
 
-db.highilght.belongsToMany(db.stories, { through: "HightlightedStories" });
-db.stories.belongsToMany(db.highilght, { through: "HightlightedStories" });
-db.account.hasMany(db.highilght, {
+db.highlight.belongsToMany(db.stories, { through: "HighlightedStories" });
+db.stories.belongsToMany(db.highlight, { through: "HighlightedStories" });
+db.account.hasMany(db.highlight, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-db.highilght.belongsTo(db.account, {
+db.highlight.belongsTo(db.account, {
   foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//Comment Mentions
+db.account.hasOne(db.commentMention, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.commentMention, {
+  foreignKey: "mention_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.comments.hasMany(db.commentMention, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.commentMention.belongsTo(db.comments, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.commentMention.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.commentMention.belongsTo(db.account, {
+  foreignKey: "mention_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//Message
+db.posts.hasOne(db.message, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.message.belongsTo(db.posts, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.message, {
+  foreignKey: "from_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.message, {
+  foreignKey: "to_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.message.belongsTo(db.account, {
+  foreignKey: "from_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.message.belongsTo(db.account, {
+  foreignKey: "to_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//Likes
+db.stories.hasMany(db.likes, {
+  foreignKey: "story_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.likes.belongsTo(db.stories, {
+  foreignKey: "story_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.posts.hasMany(db.likes, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.likes.belongsTo(db.posts, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.comments.hasMany(db.likes, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.likes.belongsTo(db.comments, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.likes, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.likes, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.likes.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.likes.belongsTo(db.account, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasOne(db.userSettings, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.userSettings.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//post Activity
+db.account.hasMany(db.postActivity, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.postActivity.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.postActivity, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.postActivity.belongsTo(db.account, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.posts.hasMany(db.postActivity, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.postActivity.belongsTo(db.posts, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//Story Activity
+db.account.hasMany(db.storyActivity, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.storyActivity.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.storyActivity, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.storyActivity.belongsTo(db.account, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.stories.hasMany(db.storyActivity, {
+  foreignKey: "story_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.storyActivity.belongsTo(db.stories, {
+  foreignKey: "story_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//Comment Activity
+db.account.hasMany(db.commentActivity, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.commentActivity.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.commentActivity, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.commentActivity.belongsTo(db.account, {
+  foreignKey: "target_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.comments.hasMany(db.commentActivity, {
+  foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.commentActivity.belongsTo(db.comments, {
+  foreignKey: "comment_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });

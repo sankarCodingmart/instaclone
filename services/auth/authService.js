@@ -2,11 +2,22 @@ import { db } from "../../models";
 import config from "../../config/auth.config";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
+import createLoginActivity from "../../middleware/loginActivity/createLoginActivity";
 const Account = db.account;
-
+const Otp = db.otp;
 const signUp = async (req, res) => {
   try {
+    const otp = req.body.otp;
+    const dbOtp = await Otp.findOne({
+      where: {
+        mail_id: req.body.mailId,
+        otp_code: otp,
+      },
+    });
+    console.log(dbOtp);
+    if (Object.keys(JSON.parse(dbOtp)).length === 0) {
+      return res.status(200).send("Invalid OTP");
+    }
     const account = await Account.create({
       user_name: req.body.user_name,
       password: bcrypt.hashSync(req.body.password, 8),
@@ -53,10 +64,17 @@ const signIn = async (req, res) => {
         message: "Invalid Password",
       });
     }
-    var token = jwt.sign({ id: account.id }, config.secret, {
+    console.log(account);
+    let token = jwt.sign({ id: account.id }, config.secret, {
       expiresIn: 86400,
     });
     res.setHeader("Set-Cookie", `jwt=${token};Path=/;HttpOnly`);
+    await createLoginActivity({
+      deviceName: req.body.deviceName,
+      userId: account.id,
+      location: req.body.location,
+      token: token,
+    });
     return res.status(200).send({
       id: account.id,
       username: account.username,

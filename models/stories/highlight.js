@@ -4,16 +4,25 @@ export default (sequelize, Sequelize) => {
     {
       story_id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
+        allowNull: false,
       },
       user_id: {
         type: Sequelize.INTEGER,
-        primary_key: true,
+        allowNull: false,
+      },
+      highlight_id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
       },
       highlight_name: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
         default: "Highlights",
+      },
+      highlight_url: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
     },
     { timestamps: true }

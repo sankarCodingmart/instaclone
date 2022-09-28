@@ -12,6 +12,7 @@ export default (sequelize, Sequelize) => {
       private_account: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
+        default: false,
       },
       bio: {
         type: Sequelize.STRING,

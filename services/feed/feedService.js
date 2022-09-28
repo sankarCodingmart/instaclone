@@ -13,9 +13,10 @@ const Media = db.media;
 const getFeedContent = async (req, res) => {
   try {
     const feedContent = {};
+    let user_id = req.params.userId;
     let account = await Account.findOne({
       where: {
-        user_name: req.body.user_name,
+        id: user_id,
       },
       include: {
         model: User,

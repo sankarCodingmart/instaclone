@@ -6,6 +6,7 @@ const Media = db.media;
 const PostTag = db.postTag;
 const Mention = db.mention;
 const Music = db.music;
+const PostActivity = db.postActivity;
 
 const createPost = async (req, res) => {
   try {
@@ -30,6 +31,12 @@ const createPost = async (req, res) => {
       mention.post_id = post_id;
       const mentionAcc = await Account.findByPk(mention.mention_id);
       mention.user_name = mentionAcc.dataValues.user_name;
+      await PostActivity.create({
+        user_id: account.dataValues.id,
+        target_id: mention.mention_id,
+        post_id: post_id,
+        type: 1,
+      });
       await Mention.create(mention);
     });
     return await res.status(200).send("successfully created");

@@ -9,9 +9,9 @@ const data = [
 
 let followdata = [];
 
-for (let i = 2; i < 6; i++) {
+for (let i = 3; i < 6; i++) {
   followdata.push({
-    follower_id: 1,
+    follower_id: 2,
     followee_id: i,
   });
 }
@@ -37,30 +37,35 @@ const musicData = [
     music_thumbnail_url: "",
     genre: "classic",
     artist_name: "A R rahuman",
+    music_url: "url",
   },
   {
     music_name: "Munbae vaa",
     music_thumbnail_url: "",
     genre: "classic",
     artist_name: "A R rahuman",
+    music_url: "url",
   },
   {
     music_name: "Oru naalil",
     music_thumbnail_url: "",
     genre: "classic",
     artist_name: "Yuvan",
+    music_url: "url",
   },
   {
     music_name: "Aval Ulagaalgiyae",
     music_thumbnail_url: "",
     genre: "melody",
     artist_name: "Karthik",
+    music_url: "url",
   },
   {
     music_name: "Despacito",
     music_thumbnail_url: "",
     genre: "rock",
     artist_name: "Luis Fonsi",
+    music_url: "url",
   },
 ];
 // for
@@ -89,10 +94,10 @@ export default async function createRecords(db) {
   //   Actor.belongsTo(Movie);
   //   await Movie.create({ name: "inception" });
   //   await Actor.create({ name: "leo" });
-  //   const userResult = await user.create({
-  //     user_id: 1,
-  //     private_account: false,
-  //   });
+  // const userResult = await user.create({
+  //   user_id: 1,
+  //   private_account: false,
+  // });
   //   const result = await stories.findOne({
   //     include: {
   //       model: storyMedia,

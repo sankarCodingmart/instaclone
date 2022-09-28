@@ -1,11 +1,15 @@
 import express from "express";
 import { verifyToken } from "../middleware";
-import createStory from "../services/stories/createStory";
-import deleteStory from "../services/stories/deleteStory";
-import viewStory from "../services/stories/viewStory";
+import { service } from "../services";
 const router = express.Router();
 
-router.post("/createStory", verifyToken, createStory);
-router.post("/deleteStory", verifyToken, deleteStory);
-router.post("/viewStory", verifyToken, viewStory);
+router.get(
+  "/:userId/highlight/:highlightId",
+  verifyToken,
+  service.viewHighlight
+);
+router.post("/:userId/highlight", verifyToken, service.createHighlight);
+router.get("/:userId", verifyToken, service.viewStory);
+router.post("/", verifyToken, service.createStory);
+router.delete("/", verifyToken, service.deleteStory);
 export default router;

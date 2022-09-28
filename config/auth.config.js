@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 export default {
-  secret: "insta-secret-key",
+  secret: process.env.AUTHSECRET,
 };

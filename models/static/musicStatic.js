@@ -13,5 +13,9 @@ export default (sequelize, Sequelize) => {
     genre: {
       type: Sequelize.STRING,
     },
+    music_url: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
   });
 };

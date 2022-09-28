@@ -10,6 +10,10 @@ export default (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         primaryKey: true,
       },
+      group_name: {
+        type: Sequelize.STRING,
+        default: "all",
+      },
     },
     { timestamps: true }
   );

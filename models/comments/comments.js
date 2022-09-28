@@ -11,20 +11,20 @@ export default (sequelize, Sequelize) => {
     },
     reply_id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
       default: null,
     },
     post_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    tag_id: {
-      type: Sequelize.INTEGER,
-    },
     likes: {
       type: Sequelize.INTEGER,
       allowNull: false,
       default: 0,
+    },
+    comment_content: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
   });
 };
