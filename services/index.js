@@ -29,6 +29,8 @@ import changeAccountType from "./settings/changePrivate";
 import getActivities from "./feed/getActivity";
 import changeAccountPrivacy from "./settings/changeAccountPrivacy";
 import archivePost from "./posts/archivePost";
+import getSavedPostGroups from "./posts/getSavedPostGroups";
+import getSavedPosts from "./posts/getSavedPosts";
 
 const service = {};
 
@@ -64,5 +66,7 @@ service.changeAccountType = changeAccountType;
 service.getActivities = getActivities;
 service.changeAccountPrivacy = changeAccountPrivacy;
 service.archivePost = archivePost;
+service.getSavedPostGroups = getSavedPostGroups;
+service.getSavedPosts = getSavedPosts;
 
 export { service };

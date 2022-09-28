@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/:userId/taggedPosts", verifyToken, service.getTaggedPosts);
 router.post("/savePost", verifyToken, service.savePosts);
+router.get("/getSavedGrp", verifyToken, service.getSavedPostGroups);
+router.get("/getSavedPosts", verifyToken, service.getSavedPosts);
 router.post("/createComment", verifyToken, service.createComment);
 router.patch("/updateLikes", verifyToken, service.updateLikes);
 router.patch("/archivePost", service.archivePost);

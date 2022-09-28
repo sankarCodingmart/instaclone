@@ -10,8 +10,9 @@ const Stickers = db.stickers;
 const createStory = async (req, res) => {
   try {
     let { account, media, storyDetails, stickers, music, mentions } = req.body;
-    storyDetails.user_id = account.id;
-    account = await Account.findByPk(account.id);
+
+    storyDetails.user_id = account.userId;
+    account = await Account.findByPk(account.userId);
     let story = await Stories.create(storyDetails);
     story = story.dataValues;
     media.story_id = story.story_id;
