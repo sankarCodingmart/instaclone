@@ -84,9 +84,38 @@ const getFeedContent = async (req, res) => {
       ],
     });
     let closeFriendsStories = await CloseFriends.findAll({
+      attributes: ["target_id"],
       where: {
         user_id: account.id,
       },
+      include: [
+        {
+          model: Stories,
+          attributes: ["story_id"],
+          where: {
+            user_id: {
+              [Op.ne]: account.id,
+            },
+            createdAt: {
+              [Op.gte]: yesterday,
+            },
+            only_close_friends: true,
+          },
+          required: true,
+        },
+        {
+          model: User,
+          attributes: ["profile_pic_url"],
+        },
+      ],
+    });
+    closeFriendsStories = JSON.parse(JSON.stringify(closeFriendsStories));
+    feedContent.closeFriendsStories = [];
+    closeFriendsStories.forEach((stories) => {
+      feedContent.closeFriendsStories.push({
+        profilePicUrl: acc.Account.User.profile_pic_url,
+        profileUserName: acc.Account.user_name,
+      });
     });
     let result = JSON.parse(JSON.stringify(followerStories));
     feedContent.storiesSection = [];
