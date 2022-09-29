@@ -20,6 +20,7 @@ import TwoFactorAuth from "./settings/twoFactorAuth";
 import Request from "./account/request";
 import StoryMention from "./stories/storyMention";
 import createRecords from "../test";
+import seedData from "../seed";
 import MusicStatic from "./static/musicStatic";
 import StickerStatic from "./static/stickerStatic";
 import Stickers from "./stories/stickers";
@@ -753,6 +754,6 @@ db.commentActivity.belongsTo(db.comments, {
   onUpdate: "CASCADE",
 });
 
-createRecords(db);
-
+// createRecords(db);
+seedData(db);
 export { db };

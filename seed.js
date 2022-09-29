@@ -1,10 +1,12 @@
 const userData = [
   {
-    userName: "sankar1",
+    user_name: "sankar1",
     name: "sankara",
     email: "sankarannamalai01@gmail.com",
     password: "sk123",
-    phoneNumber: 9784561230,
+    phone_number: 9784561230,
+    location: "Erode",
+    deviceName: "Lenova",
   },
   {
     name: "somu",
@@ -12,6 +14,8 @@ const userData = [
     email: "somu@gmail.com",
     password: "somu123",
     phoneNumber: 2365478910,
+    location: "Coimbatore",
+    deviceName: "Dell",
   },
   {
     name: "Jil",
@@ -19,6 +23,8 @@ const userData = [
     email: "jil@gmail.com",
     password: "jil321",
     phoneNumber: 4567891230,
+    location: "Chennai",
+    deviceName: "Mac book air",
   },
   {
     name: "Karna",
@@ -26,6 +32,8 @@ const userData = [
     email: "karna@gmail.com",
     password: "karna123",
     phoneNumber: 1234567980,
+    location: "Chennai",
+    deviceName: "Think Pad",
   },
   {
     name: "john",
@@ -33,6 +41,39 @@ const userData = [
     email: "john@gmail.com",
     password: "john123",
     phoneNumber: 7895461230,
+    location: "Tirunelveli",
+    deviceName: "HP",
+  },
+];
+
+const profileData = [
+  {
+    user_id: 1,
+    profile_pic_url:
+      "https://images.unsplash.com/photo-1565802527863-1353e4ebce91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW50cm92ZXJ0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    bio: "I'm an introvert",
+    website_url: "www.introvertKootam.com",
+  },
+  {
+    user_id: 2,
+    profile_pic_url:
+      "https://images.unsplash.com/photo-1565802527863-1353e4ebce91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW50cm92ZXJ0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    bio: "Pop singer/Artist",
+    website_url: "www.popsingerscommitee.com",
+  },
+  {
+    user_id: 3,
+    profile_pic_url:
+      "https://images.unsplash.com/photo-1565802527863-1353e4ebce91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW50cm92ZXJ0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    bio: "Billonaire, PlayBoy, Genius",
+    website_url: "www.thuglifes.com",
+  },
+  {
+    user_id: 4,
+    profile_pic_url:
+      "https://images.unsplash.com/photo-1565802527863-1353e4ebce91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW50cm92ZXJ0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    bio: "Part time archeologist, full time drinker",
+    website_url: "www.extrovertKootam.com",
   },
 ];
 
