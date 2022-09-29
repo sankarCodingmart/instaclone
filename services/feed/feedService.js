@@ -10,6 +10,8 @@ const Follow = db.follow;
 const Mention = db.mention;
 const PostTag = db.postTag;
 const Media = db.media;
+const CloseFriends = db.closeFriends;
+
 const getFeedContent = async (req, res) => {
   try {
     const feedContent = {};
@@ -69,6 +71,7 @@ const getFeedContent = async (req, res) => {
                 createdAt: {
                   [Op.gte]: yesterday,
                 },
+                only_close_friends: false,
               },
               required: true,
             },
@@ -79,6 +82,11 @@ const getFeedContent = async (req, res) => {
           ],
         },
       ],
+    });
+    let closeFriendsStories = await CloseFriends.findAll({
+      where: {
+        user_id: account.id,
+      },
     });
     let result = JSON.parse(JSON.stringify(followerStories));
     feedContent.storiesSection = [];

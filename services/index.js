@@ -31,6 +31,8 @@ import changeAccountPrivacy from "./settings/changeAccountPrivacy";
 import archivePost from "./posts/archivePost";
 import getSavedPostGroups from "./posts/getSavedPostGroups";
 import getSavedPosts from "./posts/getSavedPosts";
+import changeSeenBy from "./stories/changeStorySeenBy";
+import getStorySeenBy from "./stories/getStorySeenBy";
 
 const service = {};
 
@@ -68,5 +70,7 @@ service.changeAccountPrivacy = changeAccountPrivacy;
 service.archivePost = archivePost;
 service.getSavedPostGroups = getSavedPostGroups;
 service.getSavedPosts = getSavedPosts;
+service.changeSeenBy = changeSeenBy;
+service.getStorySeenBy = getStorySeenBy;
 
 export { service };

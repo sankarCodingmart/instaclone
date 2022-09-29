@@ -1,5 +1,5 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("Mention", {
+  return sequelize.define("CommentMention", {
     mention_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,

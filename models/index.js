@@ -36,6 +36,7 @@ import CommentActivity from "./activity/commentActivity";
 import PostActivity from "./activity/postActivity";
 import StoryActivity from "./activity/storyActivity";
 import Otp from "./account/otp";
+import SeenBy from "./stories/seenBy";
 
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
   host: dbconfig.HOST,
@@ -100,6 +101,8 @@ db.commentActivity = CommentActivity(sequelize, Sequelize);
 db.postActivity = PostActivity(sequelize, Sequelize);
 db.storyActivity = StoryActivity(sequelize, Sequelize);
 db.otp = Otp(sequelize, Sequelize);
+db.seenBy = SeenBy(sequelize, Sequelize);
+
 //Relations
 //User
 db.account.hasOne(db.user, {
@@ -750,6 +753,28 @@ db.comments.hasMany(db.commentActivity, {
 });
 db.commentActivity.belongsTo(db.comments, {
   foreignKey: "comment_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//SeenBy Stories
+db.stories.hasMany(db.seenBy, {
+  foreignKey: "story_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.seenBy.belongsTo(db.stories, {
+  foreignKey: "story_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.account.hasMany(db.seenBy, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+db.seenBy.belongsTo(db.account, {
+  foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });

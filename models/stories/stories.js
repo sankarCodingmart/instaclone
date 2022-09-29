@@ -22,6 +22,10 @@ export default (sequelize, Sequelize) => {
       music_id: {
         type: Sequelize.INTEGER,
       },
+      only_close_friends: {
+        type: Sequelize.BOOLEAN,
+        default: false,
+      },
     },
     { timestamps: true }
   );

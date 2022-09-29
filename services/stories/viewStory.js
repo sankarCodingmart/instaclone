@@ -14,7 +14,6 @@ const Artist = db.artist;
 const viewStory = async (req, res) => {
   try {
     let storyContent = {};
-    // console.log(req.params);
     let user_id = req.params.userId;
     console.log(user_id);
     const result = await Stories.findAll({

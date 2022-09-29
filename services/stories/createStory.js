@@ -12,6 +12,7 @@ const createStory = async (req, res) => {
     let { account, media, storyDetails, stickers, music, mentions } = req.body;
 
     storyDetails.user_id = account.userId;
+    storyDetails.is_archived = false;
     account = await Account.findByPk(account.userId);
     let story = await Stories.create(storyDetails);
     story = story.dataValues;
