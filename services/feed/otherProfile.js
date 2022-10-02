@@ -10,7 +10,8 @@ const Media = db.media;
 const Highlight = db.highlight;
 
 const getOtherProfile = async (req, res) => {
-  let user_id = req.params.userId;
+  let user_id = req.params.targetId;
+  let id = req.params.userId;
   let account = await Account.findByPk(user_id, {
     include: {
       model: User,
@@ -26,11 +27,17 @@ const getOtherProfile = async (req, res) => {
       follower_id: user_id,
     },
   });
+  let followBack = await Follow.findOne({
+    where: {
+      follower_id: user_id,
+      followee_id: id,
+    },
+  });
   account = JSON.parse(JSON.stringify(account));
   follower = JSON.parse(JSON.stringify(follower));
   following = JSON.parse(JSON.stringify(following));
   let profilePageContent = {};
-  if (account.User.private_account === true) {
+  if (account.User.private_account === true && followBack === null) {
     profilePageContent = {
       followerCount: follower.length,
       followingCount: following.length,
@@ -82,7 +89,7 @@ const getOtherProfile = async (req, res) => {
   hightlights = JSON.parse(JSON.stringify(hightlights));
   posts = JSON.parse(JSON.stringify(posts));
   taggedPosts = JSON.parse(JSON.stringify(taggedPosts));
-  console.log(taggedPosts);
+  // console.log(taggedPosts);
   profilePageContent = {
     followerCount: follower.length,
     followingCount: following.length,

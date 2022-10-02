@@ -7,7 +7,7 @@ const StoryActivity = db.storyActivity;
 const CommentActivity = db.commentActivity;
 const PostActivity = db.postActivity;
 
-const updateLikes = async (req, res) => {
+const unlike = async (req, res) => {
   const {
     storyId = null,
     postId = null,
@@ -28,7 +28,7 @@ const updateLikes = async (req, res) => {
     });
     await Posts.update(
       {
-        likes: Number(postLike.dataValues.likes) + 1,
+        likes: Number(postLike.dataValues.likes) - 1,
       },
       {
         where: {
@@ -36,12 +36,12 @@ const updateLikes = async (req, res) => {
         },
       }
     );
-    await Likes.create({
+    await Likes.destroy({
       user_id: userId,
       target_id: targetId,
       post_id: postId,
     });
-    await PostActivity.create({
+    await PostActivity.destroy({
       user_id: userId,
       target_id: targetId,
       post_id: postId,
@@ -56,7 +56,7 @@ const updateLikes = async (req, res) => {
     });
     await Stories.update(
       {
-        likes: Number(storyLike.dataValues.likes) + 1,
+        likes: Number(storyLike.dataValues.likes) - 1,
       },
       {
         where: {
@@ -64,12 +64,12 @@ const updateLikes = async (req, res) => {
         },
       }
     );
-    await Likes.create({
+    await Likes.destroy({
       user_id: userId,
       target_id: targetId,
       story_id: storyId,
     });
-    await StoryActivity.create({
+    await StoryActivity.destroy({
       user_id: userId,
       target_id: targetId,
       story_id: storyId,
@@ -84,7 +84,7 @@ const updateLikes = async (req, res) => {
     });
     await Comment.update(
       {
-        likes: Number(commentLike.dataValues.likes) + 1,
+        likes: Number(commentLike.dataValues.likes) - 1,
       },
       {
         where: {
@@ -92,19 +92,19 @@ const updateLikes = async (req, res) => {
         },
       }
     );
-    await Likes.create({
+    await Likes.destroy({
       user_id: userId,
       target_id: targetId,
       comment_id: commentId,
     });
-    await CommentActivity.create({
+    await CommentActivity.destroy({
       user_id: userId,
       target_id: targetId,
       comment_id: commentId,
       type: 2,
     });
   }
-  res.status(200).send("like updated successfully");
+  res.status(200).send("Unliked successfully");
 };
 
-export default updateLikes;
+export default unlike;

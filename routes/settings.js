@@ -10,4 +10,5 @@ router.patch(
   verifyToken,
   service.changeAccountPrivacy
 );
+router.post("/createProfile", verifyToken, service.createProfile);
 export default router;

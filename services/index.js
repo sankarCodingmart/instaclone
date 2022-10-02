@@ -33,6 +33,11 @@ import getSavedPostGroups from "./posts/getSavedPostGroups";
 import getSavedPosts from "./posts/getSavedPosts";
 import changeSeenBy from "./stories/changeStorySeenBy";
 import getStorySeenBy from "./stories/getStorySeenBy";
+import unlike from "./posts/unlike";
+import unSavePost from "./posts/unSavePost";
+import createProfile from "./settings/createProfile";
+import getOtherProfile from "./feed/otherProfile";
+import searchProfile from "./feed/searchProfile";
 
 const service = {};
 
@@ -72,5 +77,10 @@ service.getSavedPostGroups = getSavedPostGroups;
 service.getSavedPosts = getSavedPosts;
 service.changeSeenBy = changeSeenBy;
 service.getStorySeenBy = getStorySeenBy;
+service.unlike = unlike;
+service.unSavePost = unSavePost;
+service.createProfile = createProfile;
+service.getOtherProfile = getOtherProfile;
+service.searchProfile = searchProfile;
 
 export { service };

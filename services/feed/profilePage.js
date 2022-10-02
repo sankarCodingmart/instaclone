@@ -76,7 +76,7 @@ const getProfilePage = async (req, res) => {
   hightlights = JSON.parse(JSON.stringify(hightlights));
   posts = JSON.parse(JSON.stringify(posts));
   taggedPosts = JSON.parse(JSON.stringify(taggedPosts));
-  console.log(taggedPosts);
+  // console.log(taggedPosts);
   let profilePageContent = {};
   profilePageContent = {
     followerCount: follower.length,

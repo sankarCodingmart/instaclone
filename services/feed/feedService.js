@@ -58,6 +58,7 @@ const getFeedContent = async (req, res) => {
       include: [
         {
           model: Account,
+          as: "follower",
           attributes: ["id", "user_name", "name"],
           required: true,
           include: [
@@ -90,22 +91,27 @@ const getFeedContent = async (req, res) => {
       },
       include: [
         {
-          model: Stories,
-          attributes: ["story_id"],
-          where: {
-            user_id: {
-              [Op.ne]: account.id,
+          model: Account,
+          include: [
+            {
+              model: Stories,
+              attributes: ["story_id"],
+              where: {
+                user_id: {
+                  [Op.ne]: account.id,
+                },
+                createdAt: {
+                  [Op.gte]: yesterday,
+                },
+                only_close_friends: true,
+              },
+              required: true,
             },
-            createdAt: {
-              [Op.gte]: yesterday,
+            {
+              model: User,
+              attributes: ["profile_pic_url"],
             },
-            only_close_friends: true,
-          },
-          required: true,
-        },
-        {
-          model: User,
-          attributes: ["profile_pic_url"],
+          ],
         },
       ],
     });
@@ -127,16 +133,16 @@ const getFeedContent = async (req, res) => {
       });
       // console.log(acc.Account.Stories);
     });
-
     const fivePosts = await Follow.findAll({
       where: {
         follower_id: account.id,
       },
+      limit: 5,
       include: [
         {
           model: Account,
+          as: "following",
           attributes: ["id", "user_name", "name"],
-          required: true,
           include: [
             {
               model: Post,
@@ -158,8 +164,9 @@ const getFeedContent = async (req, res) => {
                   attributes: ["comment_id"],
                 },
               ],
-              limit: 5,
-              order: Sequelize.literal("random()"),
+              limit: 1,
+              // order: Sequelize.literal("random()")
+              order: [["createdAt", "DESC"]],
               where: {
                 user_id: {
                   [Op.ne]: account.id,
@@ -179,17 +186,18 @@ const getFeedContent = async (req, res) => {
     // console.log(result);
     feedContent.postSection = [];
     result.forEach((posts) => {
-      console.log(posts.Account.Posts);
+      // console.log(posts.following);
       feedContent.postSection.push({
-        // profilePicUrl: posts.Account.User?.profile_pic_url,
-        profileName: posts?.Account?.Posts[0]?.user_name,
-        likes: posts?.Account?.Posts[0]?.likes,
-        caption: posts?.Account?.Posts[0]?.caption,
-        commentCount: posts?.Account?.Posts[0]?.Comments.length,
-        media: posts?.Account?.Posts[0]?.Media,
-        postTags: posts?.Account?.Posts[0]?.PostTags,
-        mentions: posts?.Account?.Posts[0]?.Mentions,
-        reel: posts?.Account?.Posts[0]?.reel,
+        postId: posts.following.Posts[0].post_id,
+        profilePicUrl: posts.following.User?.profile_pic_url,
+        profileName: posts?.following?.Posts[0]?.user_name,
+        likes: posts?.following?.Posts[0]?.likes,
+        caption: posts?.following?.Posts[0]?.caption,
+        commentCount: posts?.following?.Posts[0]?.Comments.length,
+        media: posts?.following?.Posts[0]?.Media,
+        postTags: posts?.following?.Posts[0]?.PostTags,
+        mentions: posts?.following?.Posts[0]?.Mentions,
+        reel: posts?.following?.Posts[0]?.reel,
       });
     });
     await res.status(200).send(feedContent);

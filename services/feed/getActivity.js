@@ -16,8 +16,8 @@ const StoryMedia = db.storyMedia;
 const getActivities = async (req, res) => {
   try {
     const user_id = req.params.userId;
-
-    let commentActivities = CommentActivity.findAll({
+    // console.log(user_id);
+    let commentActivities = await CommentActivity.findAll({
       where: {
         target_id: user_id,
       },
@@ -39,8 +39,8 @@ const getActivities = async (req, res) => {
       ],
     });
     commentActivities = JSON.parse(JSON.stringify(commentActivities));
-    console.log(commentActivities);
-    let storyActivities = StoryActivity.findAll({
+    // console.log(commentActivities);
+    let storyActivities = await StoryActivity.findAll({
       where: {
         target_id: user_id,
       },
@@ -67,7 +67,7 @@ const getActivities = async (req, res) => {
         },
       ],
     });
-    let postActivities = PostActivity.findAll({
+    let postActivities = await PostActivity.findAll({
       where: {
         target_id: user_id,
       },
@@ -94,7 +94,7 @@ const getActivities = async (req, res) => {
         },
       ],
     });
-    console.log(JSON.parse(JSON.stringify(postActivities)));
+    // console.log(JSON.parse(JSON.stringify(postActivities)));
     postActivities = JSON.parse(JSON.stringify(postActivities));
     storyActivities = JSON.parse(JSON.stringify(storyActivities));
     let Activities = {
