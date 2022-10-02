@@ -15,7 +15,7 @@ const createComment = async (req, res) => {
     commentTags,
     comment_content,
   } = req.body;
-  console.log(replyId);
+  // console.log(replyId);
   const obj = {
     user_id: userId,
     reply_id: replyId,

@@ -5,11 +5,30 @@ import validateEmail from "../../helper/validateEmail";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import createLoginActivity from "../../middleware/loginActivity/createLoginActivity";
+import Joi from "joi";
+
 const Account = db.account;
 const Otp = db.otp;
 const signUp = async (req, res) => {
+  const Schema = Joi.object().keys({
+    userName: Joi.string().min(3).max(20).required(),
+    email: Joi.string().min(6).max(30).required(),
+    otp: Joi.string().min(5).max(10).required(),
+    password: Joi.string().min(8).max(15).required(),
+    deviceName: Joi.string().required(),
+    location: Joi.string().alphanum().required(),
+    phoneNumber: Joi.number().integer(),
+    name: Joi.string().min(3).max(30).required(),
+  });
+
+  const result = Schema.validate(req.body);
+  if (result.error) {
+    console.log(result.error);
+    return res.status(500).send("Invalid signup data " + result.error);
+  }
+
   try {
-    const otp = req.body.otp;
+    const otp = Number(req.body.otp);
     let expiresIn = new Date(new Date().getTime() - 10 * 60 * 1000);
     const dbOtp = await Otp.findOne({
       where: {
@@ -20,6 +39,7 @@ const signUp = async (req, res) => {
         },
       },
     });
+
     // console.log(dbOtp);
     if (dbOtp && Object.keys(JSON.parse(JSON.stringify(dbOtp))).length === 0) {
       return res.status(200).send("Invalid OTP");
@@ -45,17 +65,30 @@ const signUp = async (req, res) => {
   }
 };
 const signIn = async (req, res) => {
+  const Schema = Joi.object().keys({
+    userName: Joi.string().min(3).max(30),
+    email: Joi.string().min(6).max(30),
+    password: Joi.string().min(8).max(15).required(),
+    deviceName: Joi.string().required(),
+    location: Joi.string().alphanum().required(),
+    phoneNumber: Joi.string(),
+  });
+  const result = Schema.validate(req.body);
+  if (result.error) {
+    console.log(result);
+    return res.status(500).send("Invalid signin data " + result.error);
+  }
+
   try {
     const accId = req.body.userName || req.body.email || req.body.phoneNumber;
     let account;
-    console.log(typeof accId);
     if (typeof accId === "string" && validateEmail(accId)) {
       account = await Account.findOne({
         where: {
           email: req.body.userName,
         },
       });
-    } else if (typeof accId === "string") {
+    } else if (typeof accId === "string" && isNaN(accId)) {
       account = await Account.findOne({
         where: {
           user_name: req.body.userName,
@@ -64,7 +97,7 @@ const signIn = async (req, res) => {
     } else {
       account = await Account.findOne({
         where: {
-          phone_number: req.body.userName,
+          phone_number: Number(req.body.userName),
         },
       });
     }
@@ -77,16 +110,17 @@ const signIn = async (req, res) => {
       req.body.password,
       account.password
     );
+
     if (!passwordValid) {
       return res.status(401).send({
         accessToken: null,
         message: "Invalid Username or Password",
       });
     }
-    // console.log(account);
     let token = jwt.sign({ id: account.id }, config.secret, {
       expiresIn: 86400,
     });
+
     res.setHeader("Set-Cookie", `jwt=${token};Path=/;HttpOnly`);
     await createLoginActivity({
       deviceName: req.body.deviceName,
@@ -103,6 +137,7 @@ const signIn = async (req, res) => {
       accessToken: token,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).send({ message: err.message });
   }
 };

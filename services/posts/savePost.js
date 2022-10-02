@@ -9,5 +9,6 @@ const savePost = async (req, res) => {
     post_id: postId,
     group_name: groupName,
   });
+  res.status(200).send("saved successfully");
 };
 export default savePost;

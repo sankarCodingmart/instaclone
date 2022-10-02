@@ -12,6 +12,7 @@ const createPost = async (req, res) => {
   try {
     let { account, media, postDetails, postTags, mentions, music } = req.body;
     postDetails.user_id = account.id;
+    postDetails.is_archived = false;
     account = await Account.findByPk(account.id);
     const post = await Post.create(postDetails);
     const post_id = post.dataValues.post_id;

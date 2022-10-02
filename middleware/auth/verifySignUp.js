@@ -1,8 +1,9 @@
 import { db } from "../../models";
-
+import Joi from "joi";
 const Account = db.account;
 
 const verifySignUp = async (req, res, next) => {
+  console.log(req.body);
   try {
     let user = await Account.findOne({
       where: {

@@ -7,6 +7,7 @@ dotenv.config();
 
 const generateOtp = (req, res) => {
   // console.log(process.env);
+  // console.log("hello");
   const mail_id = req.body.email;
   const otp = Math.floor(100000 + Math.random() * 900000);
   let transporter = nodemailer.createTransport({

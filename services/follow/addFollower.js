@@ -13,8 +13,8 @@ const addFollower = async (req, res) => {
     });
   } else {
     await Request.create({
-      requested_id: followerId,
-      request_id: followeeId,
+      requested_id: followeeId,
+      request_id: followerId,
     });
   }
   res.status(200).send("Follower added");
