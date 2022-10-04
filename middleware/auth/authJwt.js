@@ -13,6 +13,7 @@ const verifyToken = (req, res, next) => {
   try {
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
+        console.log(err);
         return res.status(401).send({
           message: "Unauthorized access",
         });
@@ -21,6 +22,7 @@ const verifyToken = (req, res, next) => {
       next();
     });
   } catch (err) {
+    console.log(err);
     res.status(400).send("Invalid token");
   }
 };

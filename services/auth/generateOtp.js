@@ -8,6 +8,22 @@ dotenv.config();
 const generateOtp = (req, res) => {
   // console.log(process.env);
   // console.log("hello");
+  const Schema = Joi.object().keys({
+    userName: Joi.string().min(3).max(20).required(),
+    email: Joi.string().min(6).max(30).required(),
+    otp: Joi.string().min(5).max(10).required(),
+    password: Joi.string().min(8).max(15).required(),
+    deviceName: Joi.string().required(),
+    location: Joi.string().alphanum().required(),
+    phoneNumber: Joi.number().integer(),
+    name: Joi.string().min(3).max(30).required(),
+  });
+
+  const result = Schema.validate(req.body);
+  if (result.error) {
+    console.log(result.error);
+    return res.status(500).send(result.error);
+  }
   const mail_id = req.body.email;
   const otp = Math.floor(100000 + Math.random() * 900000);
   let transporter = nodemailer.createTransport({

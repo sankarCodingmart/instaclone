@@ -9,6 +9,7 @@ const User = db.user;
 
 const viewPosts = async (req, res) => {
   const post_id = req.params.postId;
+  console.log(post_id);
   let posts = await Post.findOne({
     where: {
       post_id: post_id,
@@ -18,10 +19,12 @@ const viewPosts = async (req, res) => {
         model: Account,
         attributes: ["id", "user_name", "name"],
         required: true,
-      },
-      {
-        model: User,
-        attributes: ["profile_pic_url"],
+        include: [
+          {
+            model: User,
+            attributes: ["profile_pic_url"],
+          },
+        ],
       },
       { model: Media, attributes: ["media_url", "post_type"] },
       { model: Mention, attributes: ["mention_id", "user_name"] },
@@ -32,20 +35,23 @@ const viewPosts = async (req, res) => {
       },
     ],
   });
-  posts = JSON.parse(JSON.stringify(posts));
-  postContent = [];
-  posts.forEach((post) => {
-    postContent.push({
-      profileName: post?.Account?.Posts[0]?.user_name,
-      likes: post?.Account?.Posts[0]?.likes,
-      caption: post?.Account?.Posts[0]?.caption,
-      commentCount: post?.Account?.Posts[0]?.Comments.length,
-      media: post?.Account?.Posts[0]?.Media,
-      postTags: post?.Account?.Posts[0]?.PostTags,
-      mentions: post?.Account?.Posts[0]?.Mentions,
-      reel: post?.Account?.Posts[0]?.reel,
-    });
-  });
+  let post = JSON.parse(JSON.stringify(posts));
+
+  // console.log(post);
+  let postContent = {
+    profileName: post.Account.user_name,
+    likes: post.likes,
+    caption: post.caption,
+    location: post.location,
+    reel: post.reel,
+    musicId: post.music_id,
+    createdAt: post.createdAt,
+    postTags: post.PostTags,
+    mentions: post.postMentions,
+    comments: post.Comments,
+    media: post.Media,
+  };
+
   res.status(200).send(postContent);
 };
 export default viewPosts;

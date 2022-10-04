@@ -24,7 +24,7 @@ const signUp = async (req, res) => {
   const result = Schema.validate(req.body);
   if (result.error) {
     console.log(result.error);
-    return res.status(500).send("Invalid signup data " + result.error);
+    return res.status(500).send({ accessToken: null, error: result.error });
   }
 
   try {
@@ -57,10 +57,11 @@ const signUp = async (req, res) => {
       name: req.body.name,
     });
     if (account) {
-      signIn(req, res);
+      await signIn(req, res);
       // res.send({ message: "User was registered successfully!" });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).send({ message: err.message });
   }
 };
@@ -68,15 +69,16 @@ const signIn = async (req, res) => {
   const Schema = Joi.object().keys({
     userName: Joi.string().min(3).max(30),
     email: Joi.string().min(6).max(30),
-    password: Joi.string().min(8).max(15).required(),
+    password: Joi.string().min(8).max(20).required(),
     deviceName: Joi.string().required(),
     location: Joi.string().alphanum().required(),
     phoneNumber: Joi.string(),
   });
   const result = Schema.validate(req.body);
   if (result.error) {
-    console.log(result);
-    return res.status(500).send("Invalid signin data " + result.error);
+    // console.log(result);
+    console.log(result.error);
+    return res.status(500).send({ accessToken: null, error: result.error });
   }
 
   try {

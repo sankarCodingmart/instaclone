@@ -37,6 +37,7 @@ import PostActivity from "./activity/postActivity";
 import StoryActivity from "./activity/storyActivity";
 import Otp from "./account/otp";
 import SeenBy from "./stories/seenBy";
+import Notes from "./message/notes";
 
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
   host: dbconfig.HOST,
@@ -102,6 +103,7 @@ db.postActivity = PostActivity(sequelize, Sequelize);
 db.storyActivity = StoryActivity(sequelize, Sequelize);
 db.otp = Otp(sequelize, Sequelize);
 db.seenBy = SeenBy(sequelize, Sequelize);
+db.notes = Notes(sequelize, Sequelize);
 
 //Relations
 //User
@@ -314,12 +316,12 @@ db.comments.belongsTo(db.posts, {
 });
 
 //Comment Tags
-db.posts.hasMany(db.commentTags, {
+db.comments.hasMany(db.commentTags, {
   foreignKey: "comment_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-db.commentTags.belongsTo(db.posts, {
+db.commentTags.belongsTo(db.comments, {
   foreignKey: "comment_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
@@ -580,21 +582,25 @@ db.message.belongsTo(db.posts, {
 });
 db.account.hasMany(db.message, {
   foreignKey: "from_id",
+  as: "FromTable",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.account.hasMany(db.message, {
   foreignKey: "to_id",
+  as: "ToTable",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.message.belongsTo(db.account, {
   foreignKey: "from_id",
+  as: "FromTable",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 db.message.belongsTo(db.account, {
   foreignKey: "to_id",
+  as: "ToTable",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
@@ -774,6 +780,19 @@ db.account.hasMany(db.seenBy, {
   onUpdate: "CASCADE",
 });
 db.seenBy.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+//Notes
+db.account.hasMany(db.notes, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.notes.belongsTo(db.account, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

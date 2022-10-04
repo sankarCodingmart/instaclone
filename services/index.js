@@ -38,6 +38,10 @@ import unSavePost from "./posts/unSavePost";
 import createProfile from "./settings/createProfile";
 import getOtherProfile from "./feed/otherProfile";
 import searchProfile from "./feed/searchProfile";
+import viewComments from "./feed/viewComments";
+import getMessagePage from "./feed/messagePage";
+import viewMessages from "./Message/viewMessage";
+import createNotes from "./Message/createNotes";
 
 const service = {};
 
@@ -82,5 +86,9 @@ service.unSavePost = unSavePost;
 service.createProfile = createProfile;
 service.getOtherProfile = getOtherProfile;
 service.searchProfile = searchProfile;
+service.viewComments = viewComments;
+service.getMessagePage = getMessagePage;
+service.viewMessages = viewMessages;
+service.createNotes = createNotes;
 
 export { service };
