@@ -14,6 +14,7 @@ router.patch("/unlike", verifyToken, service.unlike);
 router.post("/archivePost", verifyToken, service.archivePost);
 router.get("/archivedPosts", verifyToken, service.getArchivedPosts);
 router.post("/unarchivePost", verifyToken, service.unArchivePost);
+router.post("/hashTagPosts", verifyToken, service.getHashTagPosts);
 router.post("/", verifyToken, service.createPost);
 router.delete("/", verifyToken, service.deletePost);
 export default router;

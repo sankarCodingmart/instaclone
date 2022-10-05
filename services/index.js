@@ -45,6 +45,7 @@ import createNotes from "./Message/createNotes";
 import getMorePosts from "./feed/getMorePost";
 import unArchivePost from "./posts/unarchivePost";
 import getArchivedPosts from "./posts/getArchivedPosts";
+import getHashTagPosts from "./posts/getHashTagPosts";
 
 const service = {};
 
@@ -96,5 +97,5 @@ service.createNotes = createNotes;
 service.getMorePosts = getMorePosts;
 service.unArchivePost = unArchivePost;
 service.getArchivedPosts = getArchivedPosts;
-
+service.getHashTagPosts = getHashTagPosts;
 export { service };
