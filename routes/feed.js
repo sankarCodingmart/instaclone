@@ -8,6 +8,7 @@ router.get(
   verifyToken,
   service.searchProfile
 );
+router.post("/explore/search", verifyToken, service.searchExplore);
 router.get("/:userId/profilePage", verifyToken, service.getProfilePage);
 router.get("/messages", verifyToken, service.getMessagePage);
 router.get("/:userId/other/:targetId", verifyToken, service.getOtherProfile);

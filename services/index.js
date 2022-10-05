@@ -46,6 +46,7 @@ import getMorePosts from "./feed/getMorePost";
 import unArchivePost from "./posts/unarchivePost";
 import getArchivedPosts from "./posts/getArchivedPosts";
 import getHashTagPosts from "./posts/getHashTagPosts";
+import searchExplore from "./feed/searchInExplore";
 
 const service = {};
 
@@ -98,4 +99,6 @@ service.getMorePosts = getMorePosts;
 service.unArchivePost = unArchivePost;
 service.getArchivedPosts = getArchivedPosts;
 service.getHashTagPosts = getHashTagPosts;
+service.searchExplore = searchExplore;
+
 export { service };
