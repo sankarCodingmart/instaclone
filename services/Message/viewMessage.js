@@ -4,7 +4,7 @@ const User = db.user;
 const Account = db.account;
 const Message = db.message;
 const viewMessages = async (req, res) => {
-  const user_id = req.params.userId;
+  const user_id = req.userId;
   const to_id = req.params.toId;
   let messages = await Message.findAll({
     attributes: ["message_content", "from_id", "createdAt"],

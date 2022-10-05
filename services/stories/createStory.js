@@ -10,7 +10,10 @@ const Stickers = db.stickers;
 const createStory = async (req, res) => {
   try {
     let { account, media, storyDetails, stickers, music, mentions } = req.body;
-
+    media = {
+      media_url: media.mediaUrl,
+      story_type: media.storyType,
+    };
     storyDetails.user_id = account.userId;
     account = await Account.findByPk(account.userId);
     let story = await Stories.create(storyDetails);
@@ -23,11 +26,14 @@ const createStory = async (req, res) => {
     });
     if (music) {
       music.story_id = story.story_id;
+      // console.log(music);
+      music.music_id = music.musicId;
       await Music.create(music);
     }
     mentions?.forEach(async (mention) => {
+      mention.mention_id = mention.mentionId;
       mention.user_id = account.dataValues.id;
-      console.log(mention.user_id);
+      // console.log(mention.user_id);
       mention.story_id = story.story_id;
       const mentionAcc = await Account.findByPk(mention.mention_id);
       mention.user_name = mentionAcc.dataValues.user_name;

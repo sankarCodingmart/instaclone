@@ -4,14 +4,13 @@ const Notes = db.notes;
 
 const createNotes = async (req, res) => {
   try {
-    let { userId, noteContent, onlyCloseFriends } = req.body;
-
+    let { noteContent, onlyCloseFriends } = req.body;
+    let userId = req.params.userId;
     await Notes.create({
       user_id: userId,
       only_close_friends: onlyCloseFriends,
       note_content: noteContent,
     });
-
     await res.status(200).send("Note created successfully");
   } catch (err) {
     console.log(err);

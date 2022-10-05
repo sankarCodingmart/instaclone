@@ -4,7 +4,7 @@ import { verifyToken } from "../middleware";
 const router = express.Router();
 
 router.get("/:userId/profilePage", verifyToken, service.getProfilePage);
-router.get("/:userId/messages", verifyToken, service.getMessagePage);
+router.get("/messages", verifyToken, service.getMessagePage);
 router.get("/:userId/other/:targetId", verifyToken, service.getOtherProfile);
 router.get(
   "/:userId/explore/search/:userName",
@@ -19,5 +19,6 @@ router.get(
 router.get("/:userId/explore/:postId", verifyToken, service.viewPosts);
 router.get("/:userId/explore", verifyToken, service.getExploreContent);
 router.get("/:userId/notifications", verifyToken, service.getActivities);
+router.get("/more/:offset", verifyToken, service.getMorePosts);
 router.get("/:userId", verifyToken, service.getFeedContent);
 export default router;

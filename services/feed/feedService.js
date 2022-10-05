@@ -47,132 +47,112 @@ const getFeedContent = async (req, res) => {
       feedContent.suggestionSection.push({
         profileName: acc.name,
         profileUserName: acc.user_name,
-        profilePicUrl: acc?.User.profile_pic_url,
+        profilePicUrl: acc?.User?.profile_pic_url,
       });
     });
     let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-    let followerStories = await Follow.findAll({
-      where: {
-        follower_id: account.id,
-      },
+    let followerStories = await Account.findAll({
+      attributes: ["user_name", "name", "id"],
       include: [
         {
-          model: Account,
+          model: Follow,
           as: "follower",
-          attributes: ["id", "user_name", "name"],
-          required: true,
-          include: [
-            {
-              model: Stories,
-              attributes: ["story_id"],
-              where: {
-                user_id: {
-                  [Op.ne]: account.id,
-                },
-                createdAt: {
-                  [Op.gte]: yesterday,
-                },
-                only_close_friends: false,
-              },
-              required: true,
+          where: {
+            followee_id: account.id,
+          },
+        },
+        {
+          model: Stories,
+          attributes: ["story_id"],
+          where: {
+            createdAt: {
+              [Op.gte]: yesterday,
             },
-            {
-              model: User,
-              attributes: ["profile_pic_url"],
-            },
-          ],
+            only_close_friends: false,
+          },
+        },
+        {
+          model: User,
+          attributes: ["profile_pic_url"],
         },
       ],
     });
-    let closeFriendsStories = await CloseFriends.findAll({
-      attributes: ["target_id"],
-      where: {
-        user_id: account.id,
-      },
+    console.log(JSON.parse(JSON.stringify(followerStories)));
+
+    let closeFriendsStories = await Account.findAll({
+      attributes: ["user_name", "name", "id"],
       include: [
         {
-          model: Account,
-          include: [
-            {
-              model: Stories,
-              attributes: ["story_id"],
-              where: {
-                user_id: {
-                  [Op.ne]: account.id,
-                },
-                createdAt: {
-                  [Op.gte]: yesterday,
-                },
-                only_close_friends: true,
-              },
-              required: true,
+          model: CloseFriends,
+          where: {
+            target_id: account.id,
+          },
+        },
+        {
+          model: Stories,
+          attributes: ["story_id"],
+          where: {
+            createdAt: {
+              [Op.gte]: yesterday,
             },
-            {
-              model: User,
-              attributes: ["profile_pic_url"],
-            },
-          ],
+            only_close_friends: true,
+          },
+        },
+        {
+          model: User,
+          attributes: ["profile_pic_url"],
         },
       ],
     });
     closeFriendsStories = JSON.parse(JSON.stringify(closeFriendsStories));
     feedContent.closeFriendsStories = [];
-    closeFriendsStories.forEach((stories) => {
-      feedContent.closeFriendsStories.push({
-        profilePicUrl: acc.Account.User.profile_pic_url,
-        profileUserName: acc.Account.user_name,
-      });
+    closeFriendsStories.forEach((acc) => {
+      if (acc.Stories.length > 0) {
+        feedContent.closeFriendsStories.push({
+          profilePicUrl: acc.User.profile_pic_url,
+          profileUserName: acc.user_name,
+          userId: acc.id,
+        });
+      }
     });
     let result = JSON.parse(JSON.stringify(followerStories));
     feedContent.storiesSection = [];
     // console.log(result);
     result.forEach((acc) => {
-      feedContent.storiesSection.push({
-        profilePicUrl: acc.Account.User.profile_pic_url,
-        profileUserName: acc.Account.user_name,
-      });
+      if (acc.Stories.length > 0) {
+        feedContent.storiesSection.push({
+          profilePicUrl: acc.User?.profile_pic_url,
+          profileUserName: acc.user_name,
+          userId: acc.id,
+        });
+      }
       // console.log(acc.Account.Stories);
     });
-    const fivePosts = await Follow.findAll({
-      where: {
-        follower_id: account.id,
-      },
+
+    const postsFive = await Post.findAll({
       limit: 5,
+      order: [["createdAt", "DESC"]],
+      where: {
+        is_archived: false,
+      },
       include: [
         {
           model: Account,
-          as: "following",
-          attributes: ["id", "user_name", "name"],
+          attributes: ["user_name", "name"],
+          where: {
+            id: {
+              [Op.ne]: account.id,
+            },
+          },
           include: [
             {
-              model: Post,
-              attributes: [
-                "post_id",
-                "caption",
-                "likes",
-                "location",
-                "createdAt",
-                "reel",
-                "music_id",
-              ],
-              include: [
-                { model: Media, attributes: ["media_url", "post_type"] },
-                { model: Mention, attributes: ["mention_id", "user_name"] },
-                { model: PostTag, attributes: ["tag_id", "tag_name"] },
-                {
-                  model: Comments,
-                  attributes: ["comment_id"],
-                },
-              ],
-              limit: 1,
-              // order: Sequelize.literal("random()")
-              order: [["createdAt", "DESC"]],
-              where: {
-                user_id: {
-                  [Op.ne]: account.id,
-                },
-              },
+              model: Follow,
+              attributes: ["follower_id"],
+              as: "follower",
               required: true,
+              where: {
+                followee_id: account.id,
+              },
             },
             {
               model: User,
@@ -180,24 +160,32 @@ const getFeedContent = async (req, res) => {
             },
           ],
         },
+        { model: Media, attributes: ["media_url", "post_type"] },
+        { model: Mention, attributes: ["mention_id", "user_name"] },
+        { model: PostTag, attributes: ["tag_id", "tag_name"] },
+        {
+          model: Comments,
+          attributes: ["comment_id"],
+        },
       ],
     });
-    result = JSON.parse(JSON.stringify(fivePosts));
+    console.log(JSON.parse(JSON.stringify(postsFive)));
+
+    result = JSON.parse(JSON.stringify(postsFive));
     // console.log(result);
     feedContent.postSection = [];
-    result.forEach((posts) => {
-      // console.log(posts.following);
+    result?.forEach((posts) => {
       feedContent.postSection.push({
-        postId: posts.following.Posts[0].post_id,
-        profilePicUrl: posts.following.User?.profile_pic_url,
-        profileName: posts?.following?.Posts[0]?.user_name,
-        likes: posts?.following?.Posts[0]?.likes,
-        caption: posts?.following?.Posts[0]?.caption,
-        commentCount: posts?.following?.Posts[0]?.Comments.length,
-        media: posts?.following?.Posts[0]?.Media,
-        postTags: posts?.following?.Posts[0]?.PostTags,
-        mentions: posts?.following?.Posts[0]?.Mentions,
-        reel: posts?.following?.Posts[0]?.reel,
+        postId: posts.post_id,
+        profilePicUrl: posts.Account.User?.profile_pic_url,
+        profileName: posts.Account.user_name,
+        likes: posts?.likes,
+        caption: posts?.caption,
+        commentCount: posts.Comments?.length,
+        media: posts?.Media,
+        postTags: posts?.PostTags,
+        mentions: posts?.Mentions,
+        reel: posts?.reel,
       });
     });
     await res.status(200).send(feedContent);
@@ -207,3 +195,122 @@ const getFeedContent = async (req, res) => {
   }
 };
 export default getFeedContent;
+
+/********** */
+/*
+
+let followerStories = await Stories.findAll({
+      attributes: ["user_id"],
+      where: {
+        user_id: {
+          [Op.ne]: account.id,
+        },
+        createdAt: {
+          [Op.gte]: yesterday,
+        },
+        only_close_friends: false,
+      },
+      include: [
+        {
+          model: Account,
+          attributes: ["id", "user_name", "name"],
+          include: [
+            {
+              model: Follow,
+              attributes: ["follower_id"],
+              as: "follower",
+              where: {
+                followee_id: account.id,
+              },
+            },
+            {
+              model: User,
+              attributes: ["profile_pic_url"],
+            },
+          ],
+        },
+      ],
+    });
+
+
+    // let closeFriendsStories = await CloseFriends.findAll({
+    //   attributes: ["target_id"],
+    //   where: {
+    //     user_id: account.id,
+    //   },
+    //   include: [
+    //     {
+    //       model: Account,
+    //       include: [
+    //         {
+    //           model: Stories,
+    //           attributes: ["story_id"],
+    //           where: {
+    //             user_id: {
+    //               [Op.ne]: account.id,
+    //             },
+    //             createdAt: {
+    //               [Op.gte]: yesterday,
+    //             },
+    //             only_close_friends: true,
+    //           },
+    //           required: true,
+    //         },
+    //         {
+    //           model: User,
+    //           attributes: ["profile_pic_url"],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // });
+       // const fivePosts = await Follow.findAll({
+    //   where: {
+    //     follower_id: account.id,
+    //   },
+    //   limit: 5,
+    //   include: [
+    //     {
+    //       model: Account,
+    //       as: "following",
+    //       attributes: ["id", "user_name", "name"],
+    //       include: [
+    //         {
+    //           model: Post,
+    //           attributes: [
+    //             "post_id",
+    //             "caption",
+    //             "likes",
+    //             "location",
+    //             "createdAt",
+    //             "reel",
+    //             "music_id",
+    //           ],
+    //           include: [
+    //             // { model: Media, attributes: ["media_url", "post_type"] },
+    //             // { model: Mention, attributes: ["mention_id", "user_name"] },
+    //             // { model: PostTag, attributes: ["tag_id", "tag_name"] },
+    //             // {
+    //             //   model: Comments,
+    //             //   attributes: ["comment_id"],
+    //             // },
+    //           ],
+    //           limit: 1,
+    //           // order: Sequelize.literal("random()")
+    //           order: [["createdAt", "DESC"]],
+    //           where: {
+    //             user_id: {
+    //               [Op.ne]: account.id,
+    //             },
+    //           },
+    //           // required: true,
+    //         },
+    //         {
+    //           model: User,
+    //           attributes: ["profile_pic_url"],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // });
+*/

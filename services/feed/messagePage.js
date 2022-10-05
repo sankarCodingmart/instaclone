@@ -3,11 +3,76 @@ import { Sequelize, Op } from "sequelize";
 const Account = db.account;
 const User = db.user;
 const Message = db.message;
-const sequelize = db.sequelize;
+const Notes = db.notes;
 const Follow = db.follow;
+const CloseFriends = db.closeFriends;
 const getMessagePage = async (req, res) => {
-  let user_id = req.params.userId;
+  let user_id = req.userId;
+  let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+  let followerNotes = await Notes.findAll({
+    attributes: ["user_id", "note_id", "note_content"],
+    where: {
+      user_id: {
+        [Op.ne]: user_id,
+      },
+      createdAt: {
+        [Op.gte]: yesterday,
+      },
+      only_close_friends: false,
+    },
+    include: [
+      {
+        model: Account,
+        attributes: ["id", "user_name", "name"],
+        include: [
+          {
+            model: Follow,
+            attributes: ["follower_id"],
+            as: "follower",
+            where: {
+              followee_id: user_id,
+            },
+          },
+          {
+            model: User,
+            attributes: ["profile_pic_url"],
+          },
+        ],
+      },
+    ],
+  });
 
+  let closeFriendsNotes = await CloseFriends.findAll({
+    attributes: ["target_id"],
+    where: {
+      user_id: user_id,
+    },
+    include: [
+      {
+        model: Account,
+        include: [
+          {
+            model: Notes,
+            attributes: ["note_id", "note_content"],
+            where: {
+              user_id: {
+                [Op.ne]: user_id,
+              },
+              createdAt: {
+                [Op.gte]: yesterday,
+              },
+              only_close_friends: true,
+            },
+            required: true,
+          },
+          {
+            model: User,
+            attributes: ["profile_pic_url"],
+          },
+        ],
+      },
+    ],
+  });
   let msgDetail = await Account.findAll({
     attributes: ["user_name"],
     include: [
@@ -31,11 +96,18 @@ const getMessagePage = async (req, res) => {
       },
     ],
   });
+  closeFriendsNotes = JSON.parse(JSON.stringify(closeFriendsNotes));
+  followerNotes = JSON.parse(JSON.stringify(followerNotes));
   msgDetail = JSON.parse(JSON.stringify(msgDetail));
   msgDetail = msgDetail.filter((msg) => {
     return msg.User != null;
   });
-  res.status(200).send(msgDetail);
+  let msgPageDetail = {
+    msgDetail: msgDetail,
+    followerNotes: followerNotes,
+    closeFriendsNotes: closeFriendsNotes,
+  };
+  res.status(200).send(msgPageDetail);
 };
 export default getMessagePage;
 
@@ -69,3 +141,39 @@ export default getMessagePage;
 //       },
 //     ],
 //   });
+
+/*
+let followerNotes = await Follow.findAll({
+    where: {
+      follower_id: user_id,
+    },
+    include: [
+      {
+        model: Account,
+        as: "follower",
+        attributes: ["id", "user_name", "name"],
+        // required: true,
+        include: [
+          {
+            model: Notes,
+            attributes: ["note_id", "note_content"],
+            where: {
+              //   user_id: {
+              //     [Op.ne]: user_id,
+              //   },
+              createdAt: {
+                [Op.gte]: yesterday,
+              },
+              only_close_friends: false,
+            },
+            // required: true,
+          },
+          {
+            model: User,
+            attributes: ["profile_pic_url"],
+          },
+        ],
+      },
+    ],
+  });
+ */

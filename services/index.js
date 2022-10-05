@@ -42,6 +42,7 @@ import viewComments from "./feed/viewComments";
 import getMessagePage from "./feed/messagePage";
 import viewMessages from "./Message/viewMessage";
 import createNotes from "./Message/createNotes";
+import getMorePosts from "./feed/getMorePost";
 
 const service = {};
 
@@ -90,5 +91,5 @@ service.viewComments = viewComments;
 service.getMessagePage = getMessagePage;
 service.viewMessages = viewMessages;
 service.createNotes = createNotes;
-
+service.getMorePosts = getMorePosts;
 export { service };
