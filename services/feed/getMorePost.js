@@ -11,7 +11,7 @@ const PostTag = db.postTag;
 const Media = db.media;
 
 const getMorePosts = async (req, res) => {
-  const user_id = userId;
+  const user_id = req.userId;
   const offset = req.params.offset;
   let morePosts = [];
   const postsFive = await Post.findAll({

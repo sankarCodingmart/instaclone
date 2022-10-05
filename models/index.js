@@ -214,7 +214,7 @@ db.savedPost.belongsTo(db.account, {
   onUpdate: "CASCADE",
 });
 
-db.posts.hasOne(db.savedPost, {
+db.posts.hasMany(db.savedPost, {
   foreignKey: "post_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

@@ -5,8 +5,7 @@ const Media = db.media;
 const SavedPost = db.savedPost;
 
 const getSavedPostGroups = async (req, res) => {
-  const user_id = req.params.userId;
-  let savedPostGrpContents = {};
+  const user_id = req.userId;
   let savedPostGroups = await SavedPost.findAll({
     attributes: ["group_name"],
     where: {
@@ -16,7 +15,7 @@ const getSavedPostGroups = async (req, res) => {
       {
         model: Post,
         attributes: ["post_id"],
-        limit: 4,
+        // limit: 4,
         include: {
           model: Media,
           attributes: ["media_url", "post_type", "post_id"],
@@ -24,8 +23,9 @@ const getSavedPostGroups = async (req, res) => {
       },
     ],
   });
+  savedPostGroups = JSON.parse(JSON.stringify(savedPostGroups));
   console.log(savedPostGroups);
-  await res.status(200).send(savedPostGrpContents);
+  await res.status(200).send(savedPostGroups);
 };
 
 export default getSavedPostGroups;

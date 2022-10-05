@@ -43,6 +43,8 @@ import getMessagePage from "./feed/messagePage";
 import viewMessages from "./Message/viewMessage";
 import createNotes from "./Message/createNotes";
 import getMorePosts from "./feed/getMorePost";
+import unArchivePost from "./posts/unarchivePost";
+import getArchivedPosts from "./posts/getArchivedPosts";
 
 const service = {};
 
@@ -92,4 +94,7 @@ service.getMessagePage = getMessagePage;
 service.viewMessages = viewMessages;
 service.createNotes = createNotes;
 service.getMorePosts = getMorePosts;
+service.unArchivePost = unArchivePost;
+service.getArchivedPosts = getArchivedPosts;
+
 export { service };

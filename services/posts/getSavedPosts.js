@@ -5,7 +5,7 @@ const Media = db.media;
 const SavedPost = db.savedPost;
 
 const getSavedPosts = async (req, res) => {
-  const user_id = req.params.userId;
+  const user_id = req.userId;
   let savedPostContents = {};
   let savedPost = await SavedPost.findAll({
     where: {

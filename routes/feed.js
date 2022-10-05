@@ -3,14 +3,14 @@ import { service } from "../services";
 import { verifyToken } from "../middleware";
 const router = express.Router();
 
-router.get("/:userId/profilePage", verifyToken, service.getProfilePage);
-router.get("/messages", verifyToken, service.getMessagePage);
-router.get("/:userId/other/:targetId", verifyToken, service.getOtherProfile);
 router.get(
   "/:userId/explore/search/:userName",
   verifyToken,
   service.searchProfile
 );
+router.get("/:userId/profilePage", verifyToken, service.getProfilePage);
+router.get("/messages", verifyToken, service.getMessagePage);
+router.get("/:userId/other/:targetId", verifyToken, service.getOtherProfile);
 router.get(
   "/:userId/post/:postId/viewComments",
   verifyToken,

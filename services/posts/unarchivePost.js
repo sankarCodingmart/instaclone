@@ -2,12 +2,12 @@ import { db } from "../../models";
 
 const Posts = db.posts;
 
-const archivePost = async (req, res) => {
+const unArchivePost = async (req, res) => {
   const post_id = req.body.postId;
   try {
     await Posts.update(
       {
-        is_archived: true,
+        is_archived: false,
       },
       {
         where: {
@@ -15,9 +15,9 @@ const archivePost = async (req, res) => {
         },
       }
     );
-    res.status(200).send("Archived Successfully");
+    res.status(200).send("Unarchived Successfully");
   } catch (err) {
     res.status(500).send({ err });
   }
 };
-export default archivePost;
+export default unArchivePost;
