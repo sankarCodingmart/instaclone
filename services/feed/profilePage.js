@@ -30,7 +30,7 @@ const getProfilePage = async (req, res) => {
     },
   });
   let hightlights = await Highlight.findAll({
-    attributes: { exclude: ["user_id", "story_id"] },
+    attributes: { exclude: ["user_id"] },
     where: {
       user_id: user_id,
     },

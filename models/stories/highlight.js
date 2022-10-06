@@ -2,10 +2,6 @@ export default (sequelize, Sequelize) => {
   return sequelize.define(
     "Highlight",
     {
-      story_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       user_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
