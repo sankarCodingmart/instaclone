@@ -47,6 +47,8 @@ import unArchivePost from "./posts/unarchivePost";
 import getArchivedPosts from "./posts/getArchivedPosts";
 import getHashTagPosts from "./posts/getHashTagPosts";
 import searchExplore from "./feed/searchInExplore";
+import resendOtp from "./auth/resendOtp";
+import generateOtp from "./auth/generateOtp";
 
 const service = {};
 
@@ -100,5 +102,7 @@ service.unArchivePost = unArchivePost;
 service.getArchivedPosts = getArchivedPosts;
 service.getHashTagPosts = getHashTagPosts;
 service.searchExplore = searchExplore;
+service.resendOtp = resendOtp;
+service.generateOtp = generateOtp;
 
 export { service };
