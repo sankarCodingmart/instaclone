@@ -20,11 +20,23 @@ const getProfilePage = async (req, res) => {
     },
   });
   let follower = await Follow.findAll({
+    attributes: [
+      [
+        db.sequelize.fn("COUNT", db.sequelize.col("followee_id")),
+        "followCount",
+      ],
+    ],
     where: {
       followee_id: user_id,
     },
   });
   let following = await Follow.findAll({
+    attributes: [
+      [
+        db.sequelize.fn("COUNT", db.sequelize.col("follower_id")),
+        "followCount",
+      ],
+    ],
     where: {
       follower_id: user_id,
     },
@@ -79,8 +91,8 @@ const getProfilePage = async (req, res) => {
   // console.log(taggedPosts);
   let profilePageContent = {};
   profilePageContent = {
-    followerCount: follower.length,
-    followingCount: following.length,
+    followerCount: Number(follower[0].followCount),
+    followingCount: Number(following[0].followCount),
     userName: account.user_name,
     name: account.name,
     bio: account.User?.bio,

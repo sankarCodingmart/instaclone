@@ -1,6 +1,5 @@
 import { Sequelize } from "sequelize";
 import { db } from "../../models";
-import follow from "../../models/account/follow";
 
 const Account = db.account;
 const Follow = db.follow;
@@ -8,7 +7,7 @@ const User = db.user;
 
 const getFollowers = async (req, res) => {
   const user_id = req.params.userId;
-  const result = await Follow.findAll({
+  let result = await Follow.findAll({
     where: {
       follower_id: user_id,
     },
@@ -26,18 +25,31 @@ const getFollowers = async (req, res) => {
       },
     ],
   });
-  console.log(JSON.parse(JSON.stringify(result)));
+
+  result = JSON.parse(JSON.stringify(result));
+  // await result.forEach(async (acc) => {
+  //   // acc.abc = "hello";
+  //   acc.followBack = false;
+  //   const mutual = await Follow.findOne({
+  //     where: {
+  //       follower_id: acc.followee_id,
+  //       followee_id: acc.follower_id,
+  //     },
+  //   });
+  //   if (mutual) acc.followBack = true;
+  // });
   let followerContent = [];
 
-  result.forEach(async (follower) => {
-    let result = null;
-    console.log(result);
+  await result.forEach(async (follower) => {
+    // let result = null;
+    // console.log(result);
+    console.log(follower);
     followerContent.push({
       followerId: follower?.followee_id,
       userName: follower.following.user_name,
       name: follower.following.name,
       profilePicUrl: follower?.following?.User?.profile_pic_url,
-      //   followBack: followBack,
+      followBack: follower.followBack,
     });
   });
   res.status(200).send(followerContent);

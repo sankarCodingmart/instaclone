@@ -1,3 +1,28 @@
+import es from "../../config/es.config";
+import { db } from "../index";
+const saveDocument = async (instance) => {
+  let include = { model: db.account };
+  await instance.reload({ include: include });
+  return await es.create({
+    index: "user",
+    id: instance.dataValues.user_id,
+    body: {
+      profile_pic_url: instance.dataValues.profile_pic_url,
+      private_account: instance.dataValues.private_account,
+      bio: instance.dataValues.bio,
+      website_url: instance.dataValues.website_url,
+      profile_story: instance.dataValues.profile_story,
+      account: instance.dataValues.Account.dataValues,
+    },
+  });
+};
+
+const deleteDocument = (instance) => {
+  return es.delete({
+    index: "user",
+    id: instance.dataValues.user_id,
+  });
+};
 export default (sequelize, Sequelize) => {
   return sequelize.define(
     "User",
@@ -24,6 +49,14 @@ export default (sequelize, Sequelize) => {
         type: Sequelize.BOOLEAN,
       },
     },
-    { timestamps: true }
+    {
+      timestamps: true,
+
+      hooks: {
+        afterCreate: saveDocument,
+        afterUpdate: saveDocument,
+        afterDestroy: deleteDocument,
+      },
+    }
   );
 };

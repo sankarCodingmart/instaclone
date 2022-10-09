@@ -106,40 +106,47 @@ const followData = [
 
 const musicData = [
   {
-    music_name: "Mayilirage",
+    music_name: "Engaeyo Partha",
     music_thumbnail_url: "",
-    genre: "classic",
-    artist_name: "A R rahuman",
-    music_url: "url",
-  },
-  {
-    music_name: "Munbae vaa",
-    music_thumbnail_url: "",
-    genre: "classic",
-    artist_name: "A R rahuman",
-    music_url: "url",
-  },
-  {
-    music_name: "Oru naalil",
-    music_thumbnail_url: "",
-    genre: "classic",
+    genre: "Melody",
     artist_name: "Yuvan",
     music_url: "url",
   },
-  {
-    music_name: "Aval Ulagaalgiyae",
-    music_thumbnail_url: "",
-    genre: "melody",
-    artist_name: "Karthik",
-    music_url: "url",
-  },
-  {
-    music_name: "Despacito",
-    music_thumbnail_url: "",
-    genre: "rock",
-    artist_name: "Luis Fonsi",
-    music_url: "url",
-  },
+  // {
+  //   music_name: "Mayilirage",
+  //   music_thumbnail_url: "",
+  //   genre: "classic",
+  //   artist_name: "A R rahuman",
+  //   music_url: "url",
+  // },
+  // {
+  //   music_name: "Munbae vaa",
+  //   music_thumbnail_url: "",
+  //   genre: "classic",
+  //   artist_name: "A R rahuman",
+  //   music_url: "url",
+  // },
+  // {
+  //   music_name: "Oru naalil",
+  //   music_thumbnail_url: "",
+  //   genre: "classic",
+  //   artist_name: "Yuvan",
+  //   music_url: "url",
+  // },
+  // {
+  //   music_name: "Aval Ulagaalgiyae",
+  //   music_thumbnail_url: "",
+  //   genre: "melody",
+  //   artist_name: "Karthik",
+  //   music_url: "url",
+  // },
+  // {
+  //   music_name: "Despacito",
+  //   music_thumbnail_url: "",
+  //   genre: "rock",
+  //   artist_name: "Luis Fonsi",
+  //   music_url: "url",
+  // },
 ];
 
 const storyData = [
@@ -191,7 +198,7 @@ export default async function seedData(db) {
     posts,
   } = db;
 
-  //Seed Music Data
+  // Seed Music Data
   // musicData.forEach(async (m) => {
   //   const d = await musicStatic.create(m);
   //   const artistData = {};
