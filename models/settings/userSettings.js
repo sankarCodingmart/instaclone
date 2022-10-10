@@ -1,5 +1,5 @@
 export default (sequelize, Sequelize) => {
-  return sequelize.define("loginActivity", {
+  return sequelize.define("UserSettings", {
     user_id: {
       type: Sequelize.INTEGER,
       primaryKey: true,

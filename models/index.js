@@ -38,6 +38,7 @@ import StoryActivity from "./activity/storyActivity";
 import Otp from "./account/otp";
 import SeenBy from "./stories/seenBy";
 import Notes from "./message/notes";
+import NotificationSettings from "./settings/notification";
 
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
   host: dbconfig.HOST,
@@ -104,7 +105,7 @@ db.storyActivity = StoryActivity(sequelize, Sequelize);
 db.otp = Otp(sequelize, Sequelize);
 db.seenBy = SeenBy(sequelize, Sequelize);
 db.notes = Notes(sequelize, Sequelize);
-
+db.notificationSettings = NotificationSettings(sequelize, Sequelize);
 //Relations
 //User
 db.account.hasOne(db.user, {
@@ -793,6 +794,18 @@ db.account.hasMany(db.notes, {
 });
 
 db.notes.belongsTo(db.account, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.account.hasOne(db.notificationSettings, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+
+db.notificationSettings.belongsTo(db.account, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",

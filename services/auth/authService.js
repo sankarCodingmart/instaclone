@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import createLoginActivity from "../../middleware/loginActivity/createLoginActivity";
 import Joi from "joi";
 
+const NotificationSettings = db.notificationSettings;
 const Account = db.account;
 const Otp = db.otp;
 const signUp = async (req, res) => {
@@ -55,6 +56,9 @@ const signUp = async (req, res) => {
       email: req.body.email,
       phone_number: req.body.phoneNumber,
       name: req.body.name,
+    });
+    await NotificationSettings.create({
+      user_id: account.dataValues.id,
     });
     if (account) {
       await signIn(req, res);
