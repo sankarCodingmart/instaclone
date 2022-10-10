@@ -10,7 +10,11 @@ import follow from "./routes/follow";
 import message from "./routes/message";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import http from "http";
+import socket from "./config/socket.config";
+
 const app = express();
+const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 import createRecords from "./test";
 
@@ -26,6 +30,7 @@ app.use("/story", story);
 app.use("/settings", settings);
 app.use("/follow", follow);
 app.use("/message", message);
-app.listen(port, () => {
+socket(server);
+server.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });

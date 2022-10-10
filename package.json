@@ -16,7 +16,8 @@
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
-    "sequelize": "^6.23.2"
+    "sequelize": "^6.23.2",
+    "socket.io": "^4.5.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -31,5 +32,9 @@
   "bugs": {
     "url": "https://github.com/sankarCodingmart/instaclone/issues"
   },
-  "homepage": "https://github.com/sankarCodingmart/instaclone#readme"
+  "homepage": "https://github.com/sankarCodingmart/instaclone#readme",
+  "devDependencies": {
+    "sequelize-auto-migrations-v2": "^1.2.1",
+    "sequelize-cli": "^6.5.1"
+  }
 }
