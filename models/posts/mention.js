@@ -18,3 +18,16 @@ export default (sequelize, Sequelize) => {
     },
   });
 };
+
+// return Promise.all([
+//   queryInterface.changeColumn("User", "user_id", {
+//     type: Sequelize.INTEGER,
+//     primaryKey: true,
+//     references: {
+//       model: "Account",
+//       key: "id",
+//       onUpdate: "CASCADE",
+//       onDelete: "CASCADE",
+//     },
+//   }),
+// ]);

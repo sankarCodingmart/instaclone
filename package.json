@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/sankarCodingmart/instaclone#readme",
   "devDependencies": {
-    "sequelize-auto-migrations-v2": "^1.2.1",
+    "@faker-js/faker": "^7.5.0",
     "sequelize-cli": "^6.5.1"
   }
 }

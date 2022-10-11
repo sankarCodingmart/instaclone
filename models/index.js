@@ -39,6 +39,7 @@ import Otp from "./account/otp";
 import SeenBy from "./stories/seenBy";
 import Notes from "./message/notes";
 import NotificationSettings from "./settings/notification";
+import populateData from "../script";
 
 const sequelize = new Sequelize(dbconfig.DB, dbconfig.USER, dbconfig.PASSWORD, {
   host: dbconfig.HOST,
@@ -813,4 +814,5 @@ db.notificationSettings.belongsTo(db.account, {
 
 // createRecords(db);
 seedData(db);
+// populateData(db);
 export { db };
